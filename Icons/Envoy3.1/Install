@@ -1,0 +1,344 @@
+; Envoy Install Script
+;
+;
+; New version for 3.1 created by Clark Hale
+;
+; Based on created by Kai Bolay and further
+; modified by Heinz Wrobel
+;
+
+;----------------------------------------------------------------------------
+; *** LOCALIZATION SECTION -- ONLY ENGLISH AT THE MOMENT ***
+( if (= @language "english")
+(
+  (set #use20
+  (cat "You must be using Kickstart 2.04 or higher to install and use Envoy."
+  ))
+
+  (set #where
+  (cat"In which disk (or drawer) should the Envoy "
+      "drawer be installed or updated?"
+  ))
+
+  (set #useinet
+  (cat "If you are using a TCP/IP protocol stack like AS225, INet-225, Miami, or "
+       "AmiTCP, you need to have SANA-II networking devices that support "
+       "multiple protocol stacks. Most devices do. \n"
+       "\n"
+       "By default this installation assumes that Envoy will coexist with a "
+       "traditional TCP/IP stack.  The default IP and ARP numbers have been "
+       "pre-set to not conflict with the default for Ethernet and Arcnet. \n"
+       "\n"
+       "DO NOT CHANGE THESE NUMBERS UNLESS YOU KNOW WHAT YOU ARE DOING!"
+       "\n"
+       "This is a difference from the original Envoy installer, where it tried "
+       "to detect if a TCP/IP stack was installed and modify based on that. "
+       "The installer always changes the IP and ARP numbers."
+  ))
+
+  (set #reinstall
+  (cat "TBD Reinstall verbiage "
+       "\n"
+  ))
+
+  (set #reinstallhelp
+  (cat "TBD Reinstall help "
+       "\n"
+  ))
+
+  (set #reinstallchoice1
+  (cat "Yes"
+  ))
+
+  (set #reinstallchoice2
+  (cat "No"
+  ))
+
+  (set #other
+  (cat "\nIf you will be using a SANA-II device which has not yet been "
+       "copied to DEVS:Networks, copy it there now manually.  Come back to "
+       "the installer when you are done."
+  ))
+
+  (set #selectother
+  (cat "Please select the SANA-II driver for your network interface. "
+  ))
+
+  (set #otherhelp
+  (cat "\nEach network interface must have an associated software driver "
+       "to work with Envoy.  This driver should be placed in DEVS:Networks "
+       "along with any other SANA-II device drivers.  The documentation "
+       "supplied with your network interface should tell you the "
+       "name of the device driver needed for your network interface. "
+  ))
+
+  (set #etherorarc
+  (cat "\nIs this device an Ethernet or ArcNet card?\n"
+  ))
+
+  (set #etherorarchelp
+  (cat "\nTBD Ethernet or ArcNet help\n"
+  ))
+
+  (set #ethernet
+  (cat "Ethernet"
+  ))
+
+  (set #arcnet
+  (cat "Arcnet"
+  ))
+
+  (set #askip
+  (cat "Please enter the packet type number of IP packets "
+       "for your network interface.\n"
+       "\n"
+       "THIS VALUE HAS BEEN PRE-ADJUSTED TO CO-EXIST WITH "
+       "NORMAL TCP/IP STACKS!\n"
+       "\n"
+       "DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING!"
+  ))
+
+  (set #iphelp
+  (cat "\nEnter the decimal number for the IP packet type used "
+       "with your network interface.  Enter the value supplied by "
+       "the documentation for your network interface if the value isn't "
+       "listed below.\n"
+       "\n"
+       "Ethernet Interfaces:   2048 (Envoy Default) 2049 (TCP/IP Compatibility)\n"
+       "ARCNET Interfaces:      240 (Envoy Default) 242 (TCP/IP Compatibility)\n"
+  ))
+
+  (set #askarp
+  (cat "Please enter the packet type number of ARP packets "
+       "for your Network Interface.\n\n"
+       "ATTENTION! Enter \"0\" if your interface does not support ARP!\n"
+       "\n"
+       "THIS VALUE HAS BEEN PRE-ADJUSTED TO CO-EXIST WITH "
+       "NORMAL TCP/IP STACKS!\n"
+       "\n"
+       "DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING!"
+
+  ))
+
+  (set #arphelp
+  (cat "\nEnter the decimal number for the ARP packet type used "
+       "with your network interface. Enter the value supplied by "
+       "the documentation for your network interface if the value isn't "
+       "listed below.\n"
+       "\n"
+       "Ethernet Interfaces:      2054 (Envoy Default) 2055 (TCP/IP Compatibility)\n"
+       "ARCNET Interfaces:        241 (Envoy Default) 243 (TCP/IP Compatibility)\n"
+  ))
+
+  (set #owner
+  (cat "Please enter the name of this Amiga's owner."
+  ))
+
+  (set #ownerhelp
+  (cat "\nEnvoy allows you to enter the name of a person "
+       "as a machine's owner.  You may leave this set to "
+       "None if you wish."
+  ))
+
+  (set #name
+  (cat "Please enter a network name for your Amiga."
+  ))
+
+  (set #namehelp
+  (cat "\nEach machine on a network must have a unique "
+       "name and number.  Machine names can have a maximum of "
+       "31 characters, and may not contain a colon (:)."
+  ))
+
+  (set #subnetprompt
+  (cat "Please enter the subnet prefix for your Envoy Network.\n"
+       "\n"
+       "For Advanced Users:\n"
+       "\n"
+       "If your subnet's netmask does not cleanly "
+       "break on IP octet boundaries, there will be a later prompt to "
+       "directly specify the IP address."
+
+  ))
+
+  (set #subnethelp
+  (cat "Each Envoy Network needs to have a subnet specified.  For the "
+       "default netmask of 255.255.255.0, this can be considered a prefix, "
+       "although this is not true for all netmask.  Advanced users can "
+       "specify IP address and subnet mask."
+  ))
+
+  (set #number
+  (cat "Please enter a node number for your Amiga.\n"
+       "\n"
+       "This will be combined with the Subnet prefix "
+       "to form an address."
+  ))
+
+  (set #numberhelp
+  (cat "\nEach machine on a network must have a unique "
+       "name and number.  Machine numbers must be in the "
+       "range of 1 to 254."
+  ))
+
+  (set #netaddr
+  (cat "Please confirm the network address for your Amiga."
+  ))
+
+  (set #netaddrhelp
+  (cat "\nEach machine on a network must have a unique "
+       "network address. \n\nSee your "
+       "Envoy documentation for more information, or contact "
+       "your Network Administrator."
+  ))
+
+
+
+))
+
+;----------------------------------------------------------------------------
+; *** THIS IS THE ACTUAL START OF THE INSTALLATION ***
+
+; (onerror (CLEANUP))
+
+;(set #envoy_source "ENVOY3_Disk1:")
+
+(if (< (/ (getversion) 65536) 37)
+        (abort #use20)
+)
+
+;
+; Figure out what workbench version they are using.
+;
+
+(set #WBVersion (/ (getversion "SYS:Libs/version.library") 65536))
+
+
+(complete 5)
+
+;----------------------------------------------------------------------------
+; Default: no update, no delete of the old installation!
+; libs, devs, and handlers into standard locations
+; We use the SYS:foo notation to get it right for warped
+; dumb user systems on boot.
+(set #destlibs   "SYS:Libs")
+(set #destl      "SYS:L")
+(set #destc      "SYS:C")
+(set #destdevs   "SYS:Devs")
+(set #destlocale "LOCALE:")
+(set #destenvarc "ENVARC:")
+(set #origenvarc #destenvarc)
+(set @default-dest "SYS:")
+(set #devnetdir (tackon #destdevs "Networks"))
+
+(set #envoy_dest
+    (tackon
+        (askdir
+            (prompt #where)
+            (help @askdir-help)
+            (default @default-dest)
+        )
+        "Envoy"
+    )
+)
+
+(set #sysok 1)
+
+; If the destination is already present, warn the user
+; and let them bail out.
+(if (exists #envoy_dest)
+   (
+    (if (askbool
+            (prompt #reinstall)
+            (help #reinstallhelp)
+            (choices #reinstallchoice1 #reinstallchoice2)
+            (default 1)
+        )
+        ; if user wants in reinstall
+        (set #ok_reinstall 1)
+        (exit) ; TBD Need to fail!
+    )
+   )
+)
+
+; Ask for device details.
+
+(if (NOT (exists #devnetdir))
+    (makedir #devnetdir)
+)
+
+
+(message #other)
+(set #DeviceName
+(askfile
+    (default #devnetdir)
+    (prompt #selectother)
+    (help #otherhelp)
+    )
+)
+
+(if (askbool
+        (prompt #etherorarc)
+        (help #etherorarchelp)
+        (choices #ethernet #arcnet)
+        (default 1)
+    )
+    ( ; default Ethernet
+        (set #IPType 2049)
+        (set #ARPType 2055)
+    )
+    ( ; ArcNet
+        (set #IPType 242)
+        (set #ARPType 243)
+    )
+)
+
+
+(set #IPType
+    (asknumber
+        (default #IPType)
+        (prompt #askip)
+        (help #iphelp)
+    )
+)
+
+(set #ARPType
+    (asknumber
+        (default #ARPType)
+        (prompt #askarp)
+        (help #arphelp)
+    )
+)
+
+(set OwnerName (askstring (prompt #owner) (default "None")  (help #ownerhelp)))
+(set HostName  (askstring (prompt #name)  (default "Amiga") (help #namehelp)))
+
+; Rather than present simple vs complex.  This tries to set up IP config with
+; one flow and simple defaults.
+
+(set #SubnetPrefix
+    (askstring
+        (prompt #subnetprompt)
+        (default "192.168.0")
+        (help #subnethelp)
+    )
+)
+
+(set #NodeNumber
+    (asknumber
+        (prompt #number)
+        (default "1")
+        (help #numberhelp)
+        (range 1 254)
+    )
+)
+
+(set #HostIP
+    (askstring
+        (prompt #netaddr)
+        (default
+            (cat #SubnetPrefix "." #NodeNumber)
+        )
+        (help #netaddrhelp)
+    )
+)
