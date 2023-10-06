@@ -72,6 +72,21 @@
        "name of the device driver needed for your network interface. "
   ))
 
+  (set #devunit
+  (cat "What is the device unit?\n"
+       "\n"
+       "If you don't know, the value is likely zero."
+  ))
+
+  (set #devunithelp
+  (cat "SANA-II supports multiple devices installed in the "
+       "same machine.  If you have only a single network "
+       "interface, the value is likely 0, but if you have "
+       "multiple devices of the same type, then you'll know "
+       "the specific device number.  Consult your hardware's "
+       "documentation for more information."
+  ))
+
   (set #etherorarc
   (cat "\nIs this device an Ethernet or ArcNet card?\n"
   ))
@@ -192,6 +207,91 @@
        "your Network Administrator."
   ))
 
+  (set #subnet
+  (cat "Is your network using a default subnet mask?\n"
+       "\n"
+       "Default:  255.255.255.0\n"
+       "\n"
+       "In almost all cases, use the default value."
+  ))
+
+  (set #subnethelp
+  (cat "\nSubnet masks are used to break a large network into smaller "
+       "subnetworks. \n\nIf you are unsure whether subnet masks "
+       "are in use, contact your Network Administrator, or see "
+       "your Envoy documentation."
+;**This help message needs to tell the user something about the consequences of this choice.
+; Will our docs really be able to help them with this particular question?**
+  ))
+  (set #submask
+  (cat "Please enter the subnet mask being used on your network."
+; ** If only one per network is possible, should be "...whether a subnet mask
+; is in use..." in the preceding Help.  If more than one is possible, then
+; this prompt needs further qualification. **
+  ))
+  (set #submaskhelp
+  (cat "\nThe subnet mask determines what portion of a network "
+       "address is used to specify the network, and what portion "
+       "is used to specify a host. \n\nFor more information, see "
+       "your Envoy documentation, or contact "
+       "your Network Administrator."
+  ))
+  (set #routeraddr
+  (cat "Do you want to select the network address for a default router?\n"
+       "\n"
+       "In almost all cases, this is not needed for Envoy."
+
+  ))
+  (set #routeraddrhelp
+  (cat "\nRouters are machines that direct network traffic from one network "
+       "to another. Usually each physical network has one router that "
+       "is designated as the \"default\" router. \n\nIf you are not sure "
+       "whether you have a default router, contact your Network "
+       "Administrator."
+  ))
+  (set #defrouter
+  (cat "Please enter the network address of the default router."
+  ))
+  (set #defrouterhelp
+  (cat "\nAs with other hosts on a network, routers must also have "
+       "a network address, usually one for each network to which they "
+       "are connected. \n\nFor more information, see "
+       "your Envoy documentation, or contact your Network Administrator."
+; **The second part of the first sentence is confusing.  Is there one default
+; router address, or several? **
+  ))
+
+  (set #realmprompt
+  (cat "Do you want to set a Realm?\n"
+       "\n"
+       "If you don't know, answer no."
+  ))
+
+  (set #realmprompthelp
+  (cat "TBD"
+  ))
+
+  (set #realm
+  (cat "Please enter the name of your Amiga's Realm."
+  ))
+  (set #realmhelp
+  (cat "\nAn Envoy Realm is a logical grouping of physical networks. "
+       "Realms are typically used to organize large numbers of "
+       "machines into manageable groups."
+; ** This needs a little more: how about max. characters, other restrictions/suggestions, whether the
+; realm must already exist, etc.  Also, Is it a grouping of networks, or of hosts?  What's the difference
+; between a Realm and a subnet defined by a subnet mask?**
+  ))
+  (set #realmserver
+  (cat "Please enter the network address of your Realm Server."
+  ))
+  (set #realmserverhelp
+  (cat "\nA Realm Server is a machine that knows about all of the Realms "
+       "that exist on your network. Enter the network address of "
+       "that machine. \n\nFor more information, see "
+       "your Envoy documentation, or contact your Network Administrator."
+  ))
+
 
 
 ))
@@ -270,10 +370,19 @@
 
 (message #other)
 (set #DeviceName
-(askfile
-    (default #devnetdir)
-    (prompt #selectother)
-    (help #otherhelp)
+    (askfile
+        (default #devnetdir)
+        (prompt #selectother)
+        (help #otherhelp)
+    )
+)
+
+(set #DeviceUnit
+    (asknumber
+        (prompt #devunit)
+        (default "1")
+        (help #devunithelp)
+        (range 1 254)
     )
 )
 
@@ -342,3 +451,148 @@
         (help #netaddrhelp)
     )
 )
+
+(set #SubnetMask "255.255.255.0")
+(if (not (askbool (prompt #subnet) (default 1) (help #subnethelp)))
+             (askstring
+                 (prompt #submask)
+                 (default #SubnetMask)
+                 (help #submaskhelp)
+             )
+
+)
+
+(set #DefaultRouter "None")
+    (if (askbool (prompt #routeraddr) (default 1) (help #routeraddrhelp))
+            (set #DefaultRouter
+                (askstring
+                    (prompt #defrouter)
+                    (default #DefaultRouter)
+                    (help #defrouterhelp)
+                )
+            )
+)
+
+(if (askbool (prompt #realmprompt) (default 2) (help #realmprompthelp))
+        ((set #RealmName
+            (askstring
+                (prompt #realm)
+                (default "NET")
+                (help #realmhelp)
+            )
+        )
+        (set #RealmIP
+            (askstring
+                (prompt #realmserver)
+                (default "192.168.0.254")
+                (help #realmserverhelp)
+            )
+        ))
+)
+
+(complete 25)
+
+
+
+(foreach "C" "#?"
+    (copylib
+        (source (tackon "C" @each-name))
+        (dest   "SYS:C")
+        (optional "oknodelete" "force" "askuser")
+    )
+)
+
+(foreach "L" "#?"
+    (copylib
+        (source (tackon "L" @each-name))
+        (dest   "SYS:L")
+        (optional "oknodelete" "force" "askuser")
+    )
+)
+
+(foreach "Libs" "#?"
+    (copylib
+        (source (tackon "Libs" @each-name))
+        (dest   "SYS:Libs")
+        (optional "oknodelete" "force" "askuser")
+    )
+)
+
+(foreach "Devs" "#?"
+    (copylib
+        (source (tackon "Devs" @each-name))
+        (dest   "SYS:Devs")
+        (optional "oknodelete" "force" "askuser")
+    )
+)
+
+(makedir "SYS:Envoy" (infos))
+(makedir "SYS:Envoy/Configuration" (infos))
+(makedir "SYS:Envoy/Accounts" (infos))
+(makedir "SYS:Envoy/Services" (infos))
+
+(foreach "Configuration" "#?"
+    (copylib
+        (source (tackon "Configuration" @each-name))
+        (dest   "SYS:Envoy/Configuration")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
+
+(foreach "Configuration" "#?.info"
+    (copyfiles
+        (source (tackon "Configuration" @each-name))
+        (dest   "SYS:Envoy/Configuration")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
+
+(foreach "Accounts" "#?"
+    (copylib
+        (source (tackon "Accounts" @each-name))
+        (dest   "SYS:Envoy/Accounts")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
+
+(foreach "Accounts" "#?.info"
+    (copyfiles
+        (source (tackon "Accounts" @each-name))
+        (dest   "SYS:Envoy/Accounts")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
+
+(foreach "Services" "#?"
+    (copylib
+        (source (tackon "Services" @each-name))
+        (dest   "SYS:Envoy/Services")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
+
+(foreach "Services" "#?.info"
+    (copyfiles
+        (source (tackon "Services" @each-name))
+        (dest   "SYS:Envoy/Services")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
+
+
+
+
+
+
+;;; COPY FILES
+(complete 75)
+
+
+
+
+
+
+
+
+
+
