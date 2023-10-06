@@ -1,0 +1,163 @@
+
+
+echo "This copies and patches the Envoy and creates a new installer."
+echo "To use one needs the following things:"
+echo "   \* LhA installed and available on the default path as LhA"
+echo "   \* Copies of the Envoy3 disks from TOSEC
+echo "   \* A copy of the Envoy3_1Update.lha archive from Aminet"
+echo "        Place the Envoy3_1Update.lha archive in this directory"
+
+delete Envoy3.1 FORCE ALL
+delete EnvoyUpdate3.1 FORCE ALL
+delete EnvoyUpdate3.1.info FORCE ALL
+
+lha e Envoy3_1Update.lha
+
+makedir Envoy3.1
+makedir Envoy3.1/Configuration
+makedir Envoy3.1/Accounts
+makedir Envoy3.1/Services
+makedir Envoy3.1/C
+makedir Envoy3.1/L
+makedir Envoy3.1/Libs
+makedir Envoy3.1/Devs
+makedir Envoy3.1/Developer
+makedir Envoy3.1/Help
+
+
+
+lha e ENVOY3_Disk1:PACKED/ACCOUNTS.LHA Envoy3.1/Accounts/
+lha e ENVOY3_Disk1:PACKED/C.LHA Envoy3.1/c/
+lha e ENVOY3_Disk1:PACKED/CENVOY.LHA Envoy3.1/c/
+lha e ENVOY3_Disk1:PACKED/CONFIGCLIENT.LHA Envoy3.1/Configuration/
+lha e ENVOY3_Disk1:PACKED/CONFIGDOC_USA.LHA Envoy3.1/Configuration/
+lha e ENVOY3_Disk1:PACKED/CONFIGSERVER.LHA Envoy3.1/Configuration/
+lha e ENVOY3_Disk1:PACKED/DEVSENVOY.LHA Envoy3.1/Devs/
+lha e ENVOY3_Disk1:PACKED/FSCLIENT.LHA Envoy3.1/L/
+lha e ENVOY3_Disk1:PACKED/L.LHA Envoy3.1/L/
+lha e ENVOY3_Disk1:PACKED/LIBS.LHA Envoy3.1/Libs/
+lha e ENVOY3_Disk1:PACKED/SERVICES.LHA Envoy3.1/Services/
+lha e ENVOY3_Disk1:EXTRAS/DEVELOPER.LHA Envoy3.1/Developer/
+
+copy ENVOY3_Disk1:EXTRAS/NIPCLOG Envoy3.1/c/
+
+rename Envoy3.1/Configuration/EnvoyPrefs.guide Envoy3.1/Help/EnvoyPrefs.guide
+copy Envoy3_Disk2:ENVOYMANUAL.GUIDE Envoy3.1/Help/
+copy Envoy3_Disk2:FIXEDBUGS Envoy3.1/Help/
+
+
+protect Envoy3.1/C/NIPCLOG rwed
+
+; Filesystem Exports.pch
+version "Envoy3.1/Configuration/Filesystem Exports"
+rename "Envoy3.1/Configuration/Filesystem Exports"  "Envoy3.1/Configuration/Filesystem Exports.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Configuration/Filesystem Exports"  "-pEnvoyUpdate3.1/Filesystem Exports.pch"  "Envoy3.1/Configuration/Filesystem Exports.old"
+delete "Envoy3.1/Configuration/Filesystem Exports.old" "EnvoyUpdate3.1/Filesystem Exports.pch"
+version "Envoy3.1/Configuration/Filesystem Exports"
+
+; Filesystem Imports.pch
+version "Envoy3.1/Configuration/Filesystem Imports"
+rename "Envoy3.1/Configuration/Filesystem Imports"  "Envoy3.1/Configuration/Filesystem Imports.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Configuration/Filesystem Imports"  "-pEnvoyUpdate3.1/Filesystem Imports.pch"  "Envoy3.1/Configuration/Filesystem Imports.old"
+delete "Envoy3.1/Configuration/Filesystem Imports.old" "EnvoyUpdate3.1/Filesystem Imports.pch"
+version "Envoy3.1/Configuration/Filesystem Imports"
+
+; Groups.pch
+version "Envoy3.1/Configuration/Groups"
+rename "Envoy3.1/Configuration/Groups"  "Envoy3.1/Configuration/Groups.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Configuration/Groups"  "-pEnvoyUpdate3.1/Groups.pch"  "Envoy3.1/Configuration/Groups.old"
+delete "Envoy3.1/Configuration/Groups.old" "EnvoyUpdate3.1/Groups.pch"
+version "Envoy3.1/Configuration/Groups"
+
+; Users.pch
+version "Envoy3.1/Configuration/Users"
+rename "Envoy3.1/Configuration/Users"  "Envoy3.1/Configuration/Users.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Configuration/Users"  "-pEnvoyUpdate3.1/Users.pch"  "Envoy3.1/Configuration/Users.old"
+delete "Envoy3.1/Configuration/Users.old" "EnvoyUpdate3.1/Users.pch"
+version "Envoy3.1/Configuration/Users"
+
+; Services Configuration.pch
+version "Envoy3.1/Configuration/Services Configuration"
+rename "Envoy3.1/Configuration/Services Configuration"  "Envoy3.1/Configuration/Services Configuration.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Configuration/Services Configuration"  "-pEnvoyUpdate3.1/Services Configuration.pch"  "Envoy3.1/Configuration/Services Configuration.old"
+delete "Envoy3.1/Configuration/Services Configuration.old" "EnvoyUpdate3.1/Services Configuration.pch"
+version "Envoy3.1/Configuration/Services Configuration"
+
+; Network Configuration.pch
+version "Envoy3.1/Configuration/Network Configuration"
+rename "Envoy3.1/Configuration/Network Configuration"  "Envoy3.1/Configuration/Network Configuration.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Configuration/Network Configuration"  "-pEnvoyUpdate3.1/Network Configuration.pch"  "Envoy3.1/Configuration/Network Configuration.old"
+delete "Envoy3.1/Configuration/Network Configuration.old" "EnvoyUpdate3.1/Network Configuration.pch"
+version "Envoy3.1/Configuration/Network Configuration"
+
+; nipc.library.pch
+version "Envoy3.1/libs/nipc.library"
+rename "Envoy3.1/libs/nipc.library"  "Envoy3.1/libs/nipc.library.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/libs/nipc.library"  "-pEnvoyUpdate3.1/nipc.library.pch"  "Envoy3.1/libs/nipc.library.old"
+delete "Envoy3.1/libs/nipc.library.old" "EnvoyUpdate3.1/nipc.library.pch"
+version "Envoy3.1/libs/nipc.library"
+
+; services.library.pch
+version "Envoy3.1/libs/services.library"
+rename "Envoy3.1/libs/services.library"  "Envoy3.1/libs/services.library.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/libs/services.library"  "-pEnvoyUpdate3.1/services.library.pch"  "Envoy3.1/libs/services.library.old"
+delete "Envoy3.1/libs/services.library.old" "EnvoyUpdate3.1/services.library.pch"
+version "Envoy3.1/libs/services.library"
+
+; envoy.library.pch
+version "Envoy3.1/libs/envoy.library"
+rename "Envoy3.1/libs/envoy.library"  "Envoy3.1/libs/envoy.library.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/libs/envoy.library"  "-pEnvoyUpdate3.1/envoy.library.pch"  "Envoy3.1/libs/envoy.library.old"
+delete "Envoy3.1/libs/envoy.library.old" "EnvoyUpdate3.1/envoy.library.pch"
+version "Envoy3.1/libs/envoy.library"
+
+; Services Manager.pch
+version "Envoy3.1/Services/Services Manager"
+rename "Envoy3.1/Services/Services Manager"  "Envoy3.1/Services/Services Manager.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Services/Services Manager"  "-pEnvoyUpdate3.1/Services Manager.pch"  "Envoy3.1/Services/Services Manager.old"
+delete "Envoy3.1/Services/Services Manager.old" "EnvoyUpdate3.1/Services Manager.pch"
+version "Envoy3.1/Services/Services Manager"
+
+; SpoolMgr.pch
+version "Envoy3.1/C/SpoolMgr"
+rename "Envoy3.1/C/SpoolMgr"  "Envoy3.1/C/SpoolMgr.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/C/SpoolMgr"  "-pEnvoyUpdate3.1/SpoolMgr.pch"  "Envoy3.1/C/SpoolMgr.old"
+delete "Envoy3.1/C/SpoolMgr.old" "EnvoyUpdate3.1/SpoolMgr.pch"
+version "Envoy3.1/C/SpoolMgr"
+
+; NIPCLOG.pch
+version "Envoy3.1/C/NIPCLOG"
+rename "Envoy3.1/C/NIPCLOG"  "Envoy3.1/C/NIPCLOG.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/C/NIPCLOG"  "-pEnvoyUpdate3.1/NIPCLOG.pch"  "Envoy3.1/C/NIPCLOG.old"
+delete "Envoy3.1/C/NIPCLOG.old" "EnvoyUpdate3.1/NIPCLOG.pch"
+version "Envoy3.1/C/NIPCLOG"
+
+;  Accounts Manager.info.pch
+rename "Envoy3.1/Accounts/Accounts Manager.info" "Envoy3.1/Accounts/Accounts Manager.info.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Accounts/Accounts Manager.info" "-pEnvoyUpdate3.1/Accounts Manager.info.pch" "Envoy3.1/Accounts/Accounts Manager.info.old"
+delete "Envoy3.1/Accounts/Accounts Manager.info.old" "EnvoyUpdate3.1/Accounts Manager.info.pch"
+
+;  filesystem.service.info.pch
+rename "Envoy3.1/Services/filesystem.service.info" "Envoy3.1/Services/filesystem.service.info.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Services/filesystem.service.info" "-pEnvoyUpdate3.1/filesystem.service.info.pch" "Envoy3.1/Services/filesystem.service.info.old"
+delete "Envoy3.1/Services/filesystem.service.info.old" "EnvoyUpdate3.1/filesystem.service.info.pch"
+
+;  printspool.service.info.pch
+rename "Envoy3.1/Services/printspool.service.info" "Envoy3.1/Services/printspool.service.info.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Services/printspool.service.info" "-pEnvoyUpdate3.1/printspool.service.info.pch" "Envoy3.1/Services/printspool.service.info.old"
+delete "Envoy3.1/Services/printspool.service.info.old" "EnvoyUpdate3.1/printspool.service.info.pch"
+
+;  Services Manager.info.pch
+rename "Envoy3.1/Services/Services Manager.info" "Envoy3.1/Services/Services Manager.info.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Services/Services Manager.info" "-pEnvoyUpdate3.1/Services Manager.info.pch" "Envoy3.1/Services/Services Manager.info.old"
+delete "Envoy3.1/Services/Services Manager.info.old" "EnvoyUpdate3.1/Services Manager.info.pch"
+
+;  FixedBugs.pch
+rename "Envoy3.1/Help/FixedBugs" "Envoy3.1/Help/FixedBugs.old"
+EnvoyUpdate3.1/spatch "-oEnvoy3.1/Help/FixedBugs" "-pEnvoyUpdate3.1/FixedBugs.pch" "Envoy3.1/Help/FixedBugs.old"
+delete "Envoy3.1/Help/FixedBugs.old" "EnvoyUpdate3.1/FixedBugs.pch"
+
+copy Icons/ "" clone all
+
+;delete EnvoyUpdate3.1
+
