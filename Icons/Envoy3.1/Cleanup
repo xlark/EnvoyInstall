@@ -1,0 +1,24 @@
+delete sys:envoy all
+
+delete c:owner
+delete c:group
+delete c:NIPCLOG
+delete c:SpoolMgr
+delete c:ChangeEFSLogin
+
+delete libs:accounts.library
+delete libs:envoy.library
+delete libs:nipc.library
+delete libs:services.library
+
+delete l:EnvoyFileSystem
+delete l:port-handler
+
+delete devs:envoyprint.device
+
+delete envarc:Envoy all
+delete env:Envoy all
+
+delete "sys:WBStartup/Accounts Manager Start.info" force
+delete "sys:WBStartup/Services Manager Start.info" force
+

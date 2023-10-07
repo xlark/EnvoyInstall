@@ -1,196 +1,69 @@
-; Envoy Installation script
+; Envoy Install Script
 ;
-; originally created by Kai Bolay. Based on
 ;
-; Envoy HARD DISK Installation script
-; Copyright (c) 1993-94 Commodore-Amiga, Inc.
-; Envoy FLOPPY DISK Installation script
-; Copyright (c) 1993-94, Commodore-Amiga, Inc.
+; New version for 3.1 created by Clark Hale
 ;
-; Changes Copyright (c) 1995 by Kai Bolay
-; Unauthorized duplication prohibited
-; Permission is granted to Intangible Assets Manufacturing
-; to redistribute changes
-;
-; Further development by Heinz Wrobel
-; (C)1997-1998 by Heinz Wrobel
-;
-; $Id: Install 2.33 1998/10/29 19:39:18 heinz Exp $
+; Based on created by Kai Bolay and further
+; modified by Heinz Wrobel
 ;
 
-
+;----------------------------------------------------------------------------
+; *** LOCALIZATION SECTION -- ONLY ENGLISH AT THE MOMENT ***
 ( if (= @language "english")
 (
   (set #use20
   (cat "You must be using Kickstart 2.04 or higher to install and use Envoy."
   ))
+
+  (set #where
+  (cat"In which disk (or drawer) should the Envoy "
+      "drawer be installed or updated?"
+  ))
+
   (set #useinet
   (cat "If you are using a TCP/IP protocol stack like AS225, INet-225, Miami, or "
        "AmiTCP, you need to have SANA-II networking devices that support "
-       "multiple protocol stacks. Most devices do. You also should not use the "
-       "same IP or ARP numbers for Envoy that you are using for TCP/IP. "
-       "Unless you are specifying your own "
-       "numbers during the configuration, this Installation will automatically "
-       "increase the common defaults to avoid conflicts.\n"
-       "If needed, verify the settings with \"Network Configuration\" after the "
-       "installation has been completed."
-  ))
-  (set #floppy
-  (cat "Do you want to install Envoy on a harddisk or on a floppy?\n\n"
-  ))
-  (set #floppyhelp
-  (cat "You should choose installation on a harddisk if possible. If installed on "
-       "a floppy disk, only a very basic installation is created in order "
-       "to save space. This basic installation will only be usable as a network client. "
-       "Neither volumes nor printers can be exported. Workbench functionality is reduced."
-  ))
-  (set #floppychoices1
-  (cat "Floppy"
-  ))
-  (set #floppychoices2
-  (cat "Harddisk"
-  ))
-  (set #floppywarning
-  (cat "IMPORTANT!\n\n"
-       "The floppy installation procedure must only be used if you "
-       "BOOTED from a COPY of a 2.04 (V37) or higher Workbench Floppy!\n\n"
-       "This Installation will delete files from the disk you have "
-       "booted from to make room for Envoy. "
-       "Use preferences editors to set up the Workbench configuration "
-       "on the disk before installing Envoy!"
-  ))
-  (set #floppywarninghelp
-  (cat "Do NOT continue with the floppy installation, if you booted from your "
-       "original Workbench floppy or a harddisk.\n"
-       "Choose Abort Install if you want to abort!"
-  ))
-  (set #notwb
-  (cat "\nSystem not booted from Workbench floppy.\nAborting Floppy Install."
-  ))
-  (set #updating
-  (cat "C: commands"
-  ))
-  (set #installfs
-  (cat "the Envoy Network File System"
-  ))
-  (set #addassign
-  (cat "Adding an ASSIGN PRINTERS: to your S:User-startup."
-  ))
-  (set #addassignhelp
-  (cat "\nIn order for network printing to work on Release 2.04 (V37) systems,"
-       "an assign must be made for PRINTERS:."
-  ))
-  (set #networktype
-  (cat "Please select what type of network configuration you are using."
-  ))
-  (set #nettypechoices1
-  (cat "Simple Network"
-  ))
-  (set #nettypechoices2
-  (cat "Complex Network"
-  ))
-  (set #nettypehelp
-  (cat "\nSimple Network\n"
+       "multiple protocol stacks. Most devices do. \n"
        "\n"
-       "Select this option if your Amiga will not be on a network that "
-       "is connected to the Internet and does not contain any network routers.\n"
+       "By default this installation assumes that Envoy will coexist with a "
+       "traditional TCP/IP stack.  The default IP and ARP numbers have been "
+       "pre-set to not conflict with the default for Ethernet and Arcnet. \n"
        "\n"
-       "Complex Network\n"
+       "DO NOT CHANGE THESE NUMBERS UNLESS YOU KNOW WHAT YOU ARE DOING!"
        "\n"
-       "Select this option if your Amiga will be "
-       "on a network that contains any network routers, or is "
-       "connected to the Internet. "
-       "See your Envoy documentation for more information on these options.\n\n"
-       "If you are unsure, start with a Simple Network setup and reconfigure "
-       "it later when it runs"
+       "This is a difference from the original Envoy installer, where it tried "
+       "to detect if a TCP/IP stack was installed and modify based on that. "
+       "The installer always changes the IP and ARP numbers."
   ))
-  (set #owner
-  (cat "Please enter the name of this Amiga's owner."
-  ))
-  (set #ownerhelp
-  (cat "\nEnvoy allows you to enter the name of a person "
-       "as a machine's owner.  You may leave this set to "
-       "None if you wish."
-  ))
-  (set #name
-  (cat "Please enter a network name for your Amiga."
-  ))
-  (set #namehelp
-  (cat "\nEach machine on a network must have a unique "
-       "name and number.  Machine names can have a maximum of "
-       "31 characters, and may not contain a colon (:)."
-  ))
-  (set #number
-  (cat "Please enter a network address for your Amiga."
-  ))
-  (set #numberhelp
-  (cat "\nEach machine on a network must have a unique "
-       "name and number.  Machine numbers must be in the "
-       "range of 1 to 254."
-  ))
-  (set #type
-  (cat "Please select the networking hardware you are using "
-       "with Envoy."
-  ))
-  (set #typechoices1
-  (cat "Commodore Ethernet Board (A2065)"
-  ))
-  (set #typechoices2
-  (cat "Commodore ARCNET Board   (A2060 or A560)"
-  ))
-  (set #typechoices3
-  (cat "AmigaLink (AmokSana)"
-  ))
-  (set #typechoices4
-  (cat "Ariadne II"
-  ))
-  (set #typechoices5
-  (cat "ICard"
-  ))
-  (set #typechoicesother
-  (cat "Other Card"
-  ))
-  (set #typehelp
-  (cat "\nCommodore Ethernet Board (A2065)\n"
-       "\n"
-       "Select this option if you will be using the Commodore A2065 "
-       "Ethernet board with Envoy.  This option can also be used if you will be using the "
-       "Ameristar Ethernet board.\n"
-       "\n"
-       "Commodore ARCNET Board (A2060 or A560)\n"
-       "\n"
-       "Select this option if you will be using the Commodore A2060 "
-       "or A560 ARCNET boards with Envoy.\n"
-       "\n"
-       "AmigaLink (AmokSana)\n"
-       "\n"
-       "Select this option if you are using ABF Computer's AmigaLink "
-       "floppy port hardware.\n"
-       "\n"
-       "Ariadne II\n"
-       "\n"
-       "Select this option if you are using VillageTronic's Ariadne II board.\n"
-       "\n"
-       "ICard\n"
-       "\n"
-       "Select this option if you are using Interworks's PCMCIA ICard.\n"
-       "\n"
-       "Other Card\n"
-       "\n"
-       "Select this option if you will be using a third-party network "
-       "interface with Envoy.  Please have the documentation supplied "
-       "with your interface ready for the next few questions.\n"
-       "\n"
 
+  (set #reinstall
+  (cat "TBD Reinstall verbiage "
+       "\n"
   ))
+
+  (set #reinstallhelp
+  (cat "TBD Reinstall help "
+       "\n"
+  ))
+
+  (set #reinstallchoice1
+  (cat "Yes"
+  ))
+
+  (set #reinstallchoice2
+  (cat "No"
+  ))
+
   (set #other
   (cat "\nIf you will be using a SANA-II device which has not yet been "
        "copied to DEVS:Networks, copy it there now manually.  Come back to "
        "the installer when you are done."
   ))
+
   (set #selectother
   (cat "Please select the SANA-II driver for your network interface. "
   ))
+
   (set #otherhelp
   (cat "\nEach network interface must have an associated software driver "
        "to work with Envoy.  This driver should be placed in DEVS:Networks "
@@ -198,45 +71,150 @@
        "supplied with your network interface should tell you the "
        "name of the device driver needed for your network interface. "
   ))
+
+  (set #devunit
+  (cat "What is the device unit?\n"
+       "\n"
+       "If you don't know, the value is likely zero."
+  ))
+
+  (set #devunithelp
+  (cat "SANA-II supports multiple devices installed in the "
+       "same machine.  If you have only a single network "
+       "interface, the value is likely 0, but if you have "
+       "multiple devices of the same type, then you'll know "
+       "the specific device number.  Consult your hardware's "
+       "documentation for more information."
+  ))
+
+  (set #etherorarc
+  (cat "\nIs this device an Ethernet or ArcNet card?\n"
+  ))
+
+  (set #etherorarchelp
+  (cat "\nTBD Ethernet or ArcNet help\n"
+  ))
+
+  (set #ethernet
+  (cat "Ethernet"
+  ))
+
+  (set #arcnet
+  (cat "Arcnet"
+  ))
+
   (set #askip
   (cat "Please enter the packet type number of IP packets "
-       "for your network interface."
+       "for your network interface.\n"
+       "\n"
+       "THIS VALUE HAS BEEN PRE-ADJUSTED TO CO-EXIST WITH "
+       "NORMAL TCP/IP STACKS!\n"
+       "\n"
+       "DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING!"
   ))
+
   (set #iphelp
   (cat "\nEnter the decimal number for the IP packet type used "
        "with your network interface.  Enter the value supplied by "
        "the documentation for your network interface if the value isn't "
        "listed below.\n"
        "\n"
-       "Ethernet Interfaces:   2048\n"
-       "ARCNET Interfaces:      240\n"
+       "Ethernet Interfaces:   2048 (Envoy Default) 2049 (TCP/IP Compatibility)\n"
+       "ARCNET Interfaces:      240 (Envoy Default) 242 (TCP/IP Compatibility)\n"
   ))
+
   (set #askarp
   (cat "Please enter the packet type number of ARP packets "
        "for your Network Interface.\n\n"
-       "ATTENTION! Enter \"0\" if your interface does not support ARP!"
+       "ATTENTION! Enter \"0\" if your interface does not support ARP!\n"
+       "\n"
+       "THIS VALUE HAS BEEN PRE-ADJUSTED TO CO-EXIST WITH "
+       "NORMAL TCP/IP STACKS!\n"
+       "\n"
+       "DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING!"
+
   ))
+
   (set #arphelp
   (cat "\nEnter the decimal number for the ARP packet type used "
        "with your network interface. Enter the value supplied by "
        "the documentation for your network interface if the value isn't "
        "listed below.\n"
        "\n"
-       "Ethernet Interfaces:      2054\n"
-       "ARCNET Interfaces:        241\n"
+       "Ethernet Interfaces:      2054 (Envoy Default) 2055 (TCP/IP Compatibility)\n"
+       "ARCNET Interfaces:        241 (Envoy Default) 243 (TCP/IP Compatibility)\n"
   ))
+
+  (set #owner
+  (cat "Please enter the name of this Amiga's owner."
+  ))
+
+  (set #ownerhelp
+  (cat "\nEnvoy allows you to enter the name of a person "
+       "as a machine's owner.  You may leave this set to "
+       "None if you wish."
+  ))
+
+  (set #name
+  (cat "Please enter a network name for your Amiga."
+  ))
+
+  (set #namehelp
+  (cat "\nEach machine on a network must have a unique "
+       "name and number.  Machine names can have a maximum of "
+       "31 characters, and may not contain a colon (:)."
+  ))
+
+  (set #subnetprompt
+  (cat "Please enter the subnet prefix for your Envoy Network.\n"
+       "\n"
+       "For Advanced Users:\n"
+       "\n"
+       "If your subnet's netmask does not cleanly "
+       "break on IP octet boundaries, there will be a later prompt to "
+       "directly specify the IP address."
+
+  ))
+
+  (set #subnethelp
+  (cat "Each Envoy Network needs to have a subnet specified.  For the "
+       "default netmask of 255.255.255.0, this can be considered a prefix, "
+       "although this is not true for all netmask.  Advanced users can "
+       "specify IP address and subnet mask."
+  ))
+
+  (set #number
+  (cat "Please enter a node number for your Amiga.\n"
+       "\n"
+       "This will be combined with the Subnet prefix "
+       "to form an address."
+  ))
+
+  (set #numberhelp
+  (cat "\nEach machine on a network must have a unique "
+       "name and number.  Machine numbers must be in the "
+       "range of 1 to 254."
+  ))
+
   (set #netaddr
-  (cat "Please enter the network address for your Amiga."
+  (cat "Please confirm the network address for your Amiga."
   ))
+
   (set #netaddrhelp
   (cat "\nEach machine on a network must have a unique "
        "network address. \n\nSee your "
        "Envoy documentation for more information, or contact "
        "your Network Administrator."
   ))
+
   (set #subnet
-  (cat "Is your network using a default subnet mask?"
+  (cat "Is your network using a default subnet mask?\n"
+       "\n"
+       "Default:  255.255.255.0\n"
+       "\n"
+       "In almost all cases, use the default value."
   ))
+
   (set #subnethelp
   (cat "\nSubnet masks are used to break a large network into smaller "
        "subnetworks. \n\nIf you are unsure whether subnet masks "
@@ -259,7 +237,10 @@
        "your Network Administrator."
   ))
   (set #routeraddr
-  (cat "Do you want to select the network address for a default router?"
+  (cat "Do you want to select the network address for a default router?\n"
+       "\n"
+       "In almost all cases, this is not needed for Envoy."
+
   ))
   (set #routeraddrhelp
   (cat "\nRouters are machines that direct network traffic from one network "
@@ -279,6 +260,17 @@
 ; **The second part of the first sentence is confusing.  Is there one default
 ; router address, or several? **
   ))
+
+  (set #realmprompt
+  (cat "Do you want to set a Realm?\n"
+       "\n"
+       "If you don't know, answer no."
+  ))
+
+  (set #realmprompthelp
+  (cat "TBD"
+  ))
+
   (set #realm
   (cat "Please enter the name of your Amiga's Realm."
   ))
@@ -299,741 +291,17 @@
        "that machine. \n\nFor more information, see "
        "your Envoy documentation, or contact your Network Administrator."
   ))
-  (set #rebootpw
-  (cat "\nFor further configuration of Envoy, you need to "
-       "use the administration account. The initial user name "
-       "and password name for this account are \"Admin\" and "
-       "\"Admin\".\n\nNote well that passwords are case sensitive "
-       "and that you should change the password for the administration "
-       "account as one of the first things that you do."
-  ))
-  (set #reboot
-  (cat "\nThe installation of Envoy is now complete.\n\n"
-       "To enable Envoy, you should reboot your Amiga.\n\n"
-       "Remove the \"ENVOY3_Disk1\" volume from the drive "
-       "and select the \"Proceed\" gadget to reboot your Amiga."
-  ))
-  (set #rebootdeinstall
-  (cat "\nEnvoy has now been deleted as well as possible.\n\n"
-       "To completely remove Envoy or to reinstall it, you should reboot your Amiga.\n\n"
-       "Remove the \"ENVOY3_Disk1\" volume from the drive "
-       "and select the \"Proceed\" gadget to reboot your Amiga."
-  ))
-  (set #where
-  (cat"In which disk (or drawer) should the Envoy "
-      "drawer be installed or updated?"
-  ))
-  (set #wherepattern
-  (cat"In which disk (or drawer) should %s "
-      "be installed or updated?"
-  ))
-  (set #where_devs
-  (cat"devices"
-  ))
-  (set #where_libs
-  (cat"libraries"
-  ))
-  (set #where_l
-  (cat"DOS handlers"
-  ))
-  (set #where_c
-  (cat"DOS commands"
-  ))
-  (set #where_locale
-  (cat"language catalogs"
-  ))
-  (set #update
-  (cat "\nDo you wish to update your current installation?\n\n"
-       "ATTENTION! If you are updating from Envoy V1.x you should select \"Re-Install\"\n\n"
-       "Re-Install means that you have to set up your configuration from scratch!"
-  ))
-  (set #updatechoice1
-  (cat "Update"
-  ))
-  (set #updatechoice2
-  (cat "Re-Install"
-  ))
-  (set #updatehelp
-  (cat "\nThe Installer has determined that you may already "
-       "have Envoy installed on your "
-       "system. If this is incorrect or if you want to "
-       "completely re-install Envoy, select \"Re-Install\". "
-       "Otherwise, select \"Update\"."
-  ))
-  (set #startrun
-  (cat "Please select which Envoy services you would like "
-       "activated when Services Manager is run. "
-  ))
-  (set #startrunchoices1
-  (cat "Printer"
-  ))
-  (set #startrunchoices2
-  (cat "File System"
-  ))
-  (set #startrunhelp
-  (cat "\nPrinter\n"
-       "\n"
-       "Select this option to enable this machine to export a printer "
-       "to other machines on the network.\n"
-       "\n"
-       "File System\n"
-       "\n"
-       "Select this option to enable this machine to export file systems "
-       "to other machines on the network.\n"
-  ))
-  (set #updateprefix
-  (cat "Updating "
-  ))
-  (set #installprefix
-  (cat "Installing "
-  ))
-  (set #msglibs
-  (cat "the Envoy libraries"
-  ))
-  (set #msgonlinehelp
-  (cat "the online help files"
-  ))
-  (set #msgclientconfig
-  (cat "the Client configuration tools"
-  ))
-  (set #msgserverconfig
-  (cat "the Server configuration tools"
-  ))
-  (set #msgaccounts
-  (cat "accounts management"
-  ))
-  (set #msgservices
-  (cat "services management"
-  ))
-  (set #msgenvoydevs
-  (cat "the Envoy devices"
-  ))
-  (set #msgenvoyl
-  (cat "the Envoy handler"
-  ))
-  (set #msgdevsV37
-  (cat "the OS 2.04 printer support"
-  ))
-  (set #msgprefsV37
-  (cat "the OS 2.04 printer prefs editor"
-  ))
-  (set #iconpos-save
-  (cat "The current Envoy icon positions will be saved now for the update."
-  ))
-  (set #iconpos-savemsg
-  (cat "Saving position of\n"
-  ))
-  (set #iconpos-update
-  (cat "Updating Envoy icon positions..."
-  ))
-  (set #deinstall
-  (cat "\nDo you wish to delete your current Envoy installation before proceeding "
-       "with the standard installation procedure?\n\n"
-       "ATTENTION! Everything relevant to Envoy like the complete Envoy subdirectory "
-       "and libraries will be deleted including the configuration. You won't "
-       "be able to get this back! You might want to read the help entry.\n\n"
-       "Select \"Kill it first!\" only if you are sure you know what you are doing!"
-  ))
-  (set #deinstall-help
-  (cat "Note that mount files in either DEVS:DOSDrivers or DEVS:Mountlist "
-       "will not be touched for safety reasons. You need to remove them "
-       "manually! Network drivers or OS file updates will not be cleaned out either. "
-       "You will also have to reconfigure your printer yourself if you used "
-       "Envoy printing. "
-       "Aside from the complete Envoy subdirectory with everything in it, "
-       "only files that can safely be deleted will be deleted.\n\n"
 
-  ))
-  (set #deinstallchoice1
-  (cat "Kill it first!"
-  ))
-  (set #deinstallchoice2
-  (cat "Just Install"
-  ))
-  (set #deinstall-working
-  (cat "Deleting Envoy..."
-  ))
-  (set #deinstall-done
-  (cat "Envoy has been removed from your harddisk."
-  ))
-;  (set #
-;  (cat
-;  ))
-))
-( if (= @language "deutsch")
-(
-  (set #use20
-  (cat "Sie müssen Kickstart 2.04 oder höher benutzen um Envoy "
-       "installieren und benutzen zu können."
-  ))
-  (set #useinet
-  (cat "Wenn Sie einen TCP/IP-Protocol-Stack wie AS225, INet-225, Miami or "
-       "AmiTCP verwenden, benötigen sie SANA-II Treiber mit Multiple Protocol "
-       "Stack Support. Die meisten aktuellen Treiber unterstützen das. "
-       "Sie sollten außerdem nicht die gleichen IP und ARP Nummern für Envoy "
-       "verwenden, die sie für TCP/IP verwenden. Solange Sie während der "
-       "Installation nicht besondere Nummern angeben, werden die normalen Vorgaben "
-       "automatisch erhöht um Konflikte zu vermeiden.\n"
-       "Falls gewünscht, überprüfen Sie die Einstellungen mit \"Network Configuration\" "
-       "nach Abschluß der Installation."
-  ))
-  (set #floppy
-  (cat "Wollen Sie Envoy auf Festplatte oder Diskette installieren?\n\n"
-  ))
-  (set #floppyhelp
-  (cat "Sie sollten Envoy auf Festplatte installieren, wenn "
-       "dies möglich ist. Auf Diskette werden nur die wichtigsten "
-       "Teile von Envoy installiert um Platz zu sparen.\n"
-       "Die Disketteninstallation enthält nur ein Minimalsystem, damit Sie "
-       "auf Dateien eines Servers zugreifen können. "
-       "Sie können keine Laufwerke oder Drucker exportieren."
-  ))
-  (set #floppychoices1
-  (cat "Diskette"
-  ))
-  (set #floppychoices2
-  (cat "Festplatte"
-  ))
-  (set #floppywarning
-  (cat "WICHTIG!\n\n"
-       "Die Disketteninstallation darf nur benutzt werden, wenn Sie "
-       "Ihren Rechner mit einer Kopie der Orginal Workbench "
-       "Disketten 2.04 (V37) oder neuer gestartet haben!\n\n"
-       "Dieses Installationskript wird dann Dateien von der Start-Diskette "
-       "löschen damit genug Platz für Envoy ist. "
-       "Verwenden Sie die Preferences Editoren um die Workbench-Konfiguration "
-       "zu erstellen, bevor Sie Envoy auf dieser Diskette installieren!"
-  ))
-  (set #floppywarninghelp
-  (cat "Sie müssen die Disketten-Installation jetzt abbrechen, wenn Sie "
-       "von der original Workbench-Diskette oder Harddisk gestartet haben.\n"
-       "Wählen sie \"Installation abbrechen\" um jetzt abzubrechen!"
-  ))
-  (set #notwb
-  (cat "\nDas System wurde nicht von einer Workbench-Diskette gestartet.\n"
-       "Breche Disketten-Installation ab."
-  ))
-  (set #updating
-  (cat "die C: Befehle"
-  ))
-  (set #installfs
-  (cat "das Envoy Netzwerk-Dateisystem"
-  ))
-  (set #addassign
-  (cat "Füge einen ASSIGN PRINTERS: in S:User-Startup ein."
-  ))
-  (set #addassignhelp
-  (cat "\nDamit das Drucken über Netzwerk mit Version 2.04 (V37) funktioniert, "
-       "muß ein Assign für PRINTERS: durchgeführt werden."
-  ))
-  (set #networktype
-  (cat "Bitte wählen Sie, welche Art der Netzwerkkonfiguration Sie benutzen."
-  ))
-  (set #nettypechoices1
-  (cat "Einfaches (simple) Netzwerk"
-  ))
-  (set #nettypechoices2
-  (cat "Komplexes (complex) Netzwerk"
-  ))
-  (set #nettypehelp
-  (cat "\nEinfaches (simple) Netzwerk\n"
-       "\n"
-       "Wählen Sie diesen Punkt, wenn Sie Ihren Amiga mit einem Netzwerk verbinden, "
-       "das nicht mit dem "Internet" verbunden ist und das keine \"Router\" verwendet.\n"
-       "\n"
-       "Komplexes (complex) Netzwerk\n"
-       "\n"
-       "Diesen Punkt müssen Sie anwählen, wenn Ihr Amiga in einem "
-       "Netzwerk mit \"Routern\" eingefügt wird, oder wenn Sie den Rechner "
-       "mit dem \"Internet\" verbinden."
-       "In der Envoy-Anleitung finden Sie weitere Informationen.\n\n"
-       "Wenn Sie sich nicht sicher sind, fangen Sie immer mir einem Einfachen Netzwerk an!"
-  ))
-  (set #owner
-  (cat "Bitte geben Sie den Namen des Besitzers dieses Amigas ein."
-  ))
-  (set #ownerhelp
-  (cat "\nEnvoy erlaubt es den Namen einer Person als "
-       "Besitzer des Rechners einzugeben. Sie können diesen Eintrag "
-       "auch bei \"None\" belassen, falls Sie das wünschen."
-  ))
-  (set #name
-  (cat "Bitte geben Sie einen Netzwerk-Namen für Ihren Amiga ein."
-  ))
-  (set #namehelp
-  (cat "\nJeder Rechner im Netzwerk muß einen eindeutigen Namen und "
-       "eine eindeutige Nummer haben. Rechnernamen dürfen höchstens "
-       "31 Buchstaben haben und dürfen keinen Doppelpunkt (:) enthalten."
-  ))
-  (set #number
-  (cat "Bitte geben Sie eine Netzwerkadresse für Ihren Amiga ein."
-  ))
-  (set #numberhelp
-  (cat "\nJeder Rechner im Netzwerk muß einen eindeutigen Namen und "
-       "eine eindeutige Nummer haben. Rechnernummern dürfen aus "
-       "dem Bereich von 1 bis 254 gewählt werden."
-  ))
-  (set #type
-  (cat "Geben Sie bitte an, welche Netzwerk-Hardware Sie verwenden. "
-  ))
-  (set #typechoices1
-  (cat "Commodore Ethernet Karte (A2065)"
-  ))
-  (set #typechoices2
-  (cat "Commodore ARCNET Karte   (A2060 or A560)"
-  ))
-  (set #typechoices3
-  (cat "AmigaLink (AmokSana)"
-  ))
-  (set #typechoices4
-  (cat "Ariadne II"
-  ))
-  (set #typechoices5
-  (cat "ICard"
-  ))
-  (set #typechoicesother
-  (cat "Andere Karte"
-  ))
-  (set #typehelp
-  (cat "\nCommodore Ethernet Karte (A2065)\n"
-       "\n"
-       "Wählen Sie diesen Punkt, wenn Sie Commodores A2065 "
-       "Ethernet Karte mit Envoy benutzen.  Dieser Punkt kann auch angewählt werden, "
-       "wenn Sie eine Ameristar Ethernet Karte verwenden.\n"
-       "\n"
-       "Commodore ARCNET Karte (A2060 or A560)\n"
-       "\n"
-       "Wählen Sie diesen Punkt, wenn Sie Commodores A2060 "
-       "Arcnet Karte mit Envoy benutzen.\n"
-       "\n"
-       "AmigaLink (AmokSana)\n"
-       "\n"
-       "Wählen Sie diesen Punkt, wenn Sie die AmigaLink Floppyport "
-       "Hardware verwenden.\n"
-       "\n"
-       "Ariadne II\n"
-       "\n"
-       "Wählen Sie diesen Punkt, wenn Sie ein Ariadne II Board von VillageTronic verwenden.\n"
-       "\n"
-       "ICard\n"
-       "\n"
-       "Wählen Sie diesen Punkt, wenn Sie eine PCMCIA ICard von Interworks verwenden.\n"
-       "\n"
-       "Andere Karte\n"
-       "\n"
-       "Wenn Sie diesen Punkt anwählen benutzen Sie einen SANA-II-Treiber "
-       "von einem Dritthersteller. Bitte lesen Sie die entsprechende "
-       "Produktbeschreibung.\n"
-       "\n"
 
-  ))
-  (set #other
-  (cat "\nWenn Sie einen SANA-II Gerätetreiber verwenden wollen der noch "
-       "nicht nach DEVS:Networks kopiert wurde, so kopieren Sie diesen jetzt. "
-       "Sie benutzen ja zum Glück einen Rechner mit vernünftigem Multitasking, und "
-       "können den Kopiervorgang deshalb jetzt leicht mit der Workbench oder "
-       "der Shell durchführen.\n"
-       "Setzen Sie die Installation bitte erst danach an dieser Stelle fort."
-  ))
-  (set #selectother
-  (cat "Wählen Sie einen SANA-II Treiber für Ihren Netzwerkanschluß (Karte). "
-  ))
-  (set #otherhelp
-  (cat "\nJeder Netzwerkanschluß (jede Netzwerkkarte) braucht einen Software-"
-       "Treiber um mit Envoy zusammenarbeiten zu können. Dieser Treiber "
-       "sollte nach DEVS:Networks, wo sich auch die anderen Netzwerk-Treiber befinden, "
-       "kopiert werden."
-  ))
-  (set #askip
-  (cat "Bitte geben Sie die \"packet type number\" für \"IP packets\" Ihres "
-       "Treibers an."
-  ))
-  (set #iphelp
-  (cat "\nDie Dezimalzahl, die Sie angeben wird als \"IP packet type\" für "
-       "den Gerätetreiber verwendet. Geben Sie den Wert an der in der "
-       "Dokumentation zum Gerätetreiber erwähnt wird, wenn der Wert nicht "
-       "in der untenstehenden Liste enthalten ist.\n"
-       "\n"
-       "Ethernet:   2048\n"
-       "ARCNET:      240\n"
-  ))
-  (set #askarp
-  (cat "Bitte geben Sie die \"packet type number\" für \"ARP packets\" "
-       "Ihres Treibers an.\n\n"
-       "ACHTUNG! Geben Sie \"0\" an, wenn der Treiber kein ARP unterstützt!"
-  ))
-  (set #arphelp
-  (cat "\nDie Dezimalzahl, die Sie angeben wird als \"ARP packet type\" für "
-       "den Gerätetreiber verwendet. Geben Sie den Wert an der in der "
-       "Dokumentation zum Gerätetreiber erwähnt wird, wenn der Wert nicht "
-       "in der untenstehenden Liste enthalten ist.\n"
-       "\n"
-       "Ethernet:      2054\n"
-       "ARCNET:        241\n"
-  ))
-  (set #netaddr
-  (cat "Bitte geben Sie die Netzwerkadresse Ihres Amigas an."
-  ))
-  (set #netaddrhelp
-  (cat "\nJeder Rechner im Netzwerk muß eine eindeutige Netzwerkadresse haben.\n\n"
-       "In der Envoy-Dokumentation finden Sie genauere Hinweise. "
-       "Sprechen Sie auch mit dem Verwalter Ihres Netzwerkes."
-  ))
-  (set #subnet
-  (cat "Benutzt Ihr Netzwerk einen Vorgabewert (default) für die \"subnet mask\"?"
-  ))
-  (set #subnethelp
-  (cat "\nDie \"subnet mask\" wird verwendet um große Netzwerke in kleinere "
-       "Teilnetze zu zerlegen. \n\nWenn Sie nicht sicher sind, was Sie "
-       "hier eintragen sollen, dann schauen Sie in die Dokumentation und "
-       "sprechen mit dem Verwalter Ihres Netzwerkes."
-  ))
-  (set #submask
-  (cat "Bitte geben Sie die \"subnet mask\", die in Ihrem Netzwerk benutzt wird, an."
-  ))
-  (set #submaskhelp
-  (cat "\nDie \"subnet mask\" bestimmt, welcher Teil der Netzwerkadresse "
-       "das \"net\" und welcher Teil den \"host\" angibt. Mehr dazu "
-       "steht in der Dokumentation."
-  ))
-  (set #routeraddr
-  (cat "Wollen Sie eine Netzadresse für den \"default router\" angeben?"
-  ))
-  (set #routeraddrhelp
-  (cat "\n\"Router\" sind Geräte, die verschiedene Teilnetzwerke verbinden. "
-       "Bitte fragen Sie den Verwalter Ihres Netzwerkes, was Sie hier angeben "
-       "müssen."
-  ))
-  (set #defrouter
-  (cat "Bitte geben Sie die Netzwerkadresse des \"default routers\" an."
-  ))
-  (set #defrouterhelp
-  (cat "\nWie alle Rechner im Netzwerk muß auch der \"router\" eine eindeutige "
-       "Adresse haben. "
-       "In der Envoy-Dokumentation finden Sie genauere Hinweise. "
-       "Sprechen Sie auch mit dem Verwalter Ihres Netzes."
-  ))
-  (set #realm
-  (cat "Bitte geben Sie den Namen des \"Realms\" ein, in dem sich Ihr Amiga befindet."
-  ))
-  (set #realmhelp
-  (cat "\Ein Envoy \"Realm\" ist eine logische Gruppierung von physikalischen. "
-       "Netzwerken. \"Realms\" werden normalerweise dazu benutzt eine große "
-       "Anzahl von Rechnern in handhabbare Gruppen einzuteilen. "
-       "In komplexen Netzwerken benötigen Sie mindestens einen \"Realm\"."
-  ))
-  (set #realmserver
-  (cat "Bitte geben Sie die Netzwerkadresse Ihres \"Realm Servers\" ein."
-  ))
-  (set #realmserverhelp
-  (cat "\nA Ein \"Realm Server\" kennt alle physikalischen Netze, "
-       "die zu Ihm gehören. Er kennt auch alle anderen \"Realms\" im Netz. "
-       "In der Envoy-Dokumentation finden Sie genauere Hinweise. "
-       "Sprechen Sie auch mit dem Verwalter Ihres Netzwerkes."
-  ))
-  (set #rebootpw
-  (cat "\nZur weiteren Konfiguration von Envoy müssen sie den "
-       "Administrator Login verwenden. Die Startwerte für den Namen "
-       "und das Paßwort dieses Logins sind nach einer Neuinstallation "
-       "\"Admin\" und \"Admin\".\n\nBitte beachten Sie die Groß- und "
-       "Kleinschreibung bei jedem Paßwort und ändern sie das Paßwort "
-       "des Administrator Logins möglichst bald."
-  ))
-  (set #reboot
-  (cat "\nDie Installation von Envoy ist nun beendet.\n\n"
-       "Um Envoy benutzen zu können sollten Sie Ihren Amiga neu starten.\n\n"
-       "Entfernen Sie den \"ENVOY3_Disk1\" Datenträger aus dem Laufwerk "
-       "und wählen Sie \"Weiter\" um einen Neustart auszulösen."
-  ))
-  (set #rebootdeinstall
-  (cat "\nEnvoy wurde so gut wie möglich gelöscht.\n\n"
-       "Um diesen Vorgang abzuschließen sollten Sie Ihren Amiga jetzt neu starten.\n\n"
-       "Entfernen Sie den \"ENVOY3_Disk1\" Datenträger aus dem Laufwerk "
-       "und wählen Sie \"Weiter\" um einen Neustart auszulösen."
-  ))
-  (set #where
-  (cat"Auf welchem Datenträger (oder in welcher Schublade) soll die Envoy "
-      "Schublade installiert werden?"
-  ))
-  (set #wherepattern
-  (cat"Auf welchem Datenträger (oder in welcher Schublade) sollen %s "
-      "installiert werden?"
-  ))
-  (set #where_devs
-  (cat"Gerätetreiber"
-  ))
-  (set #where_libs
-  (cat"Libraries"
-  ))
-  (set #where_l
-  (cat"DOS-Handler"
-  ))
-  (set #where_c
-  (cat"DOS-Kommandos"
-  ))
-  (set #where_locale
-  (cat"Sprachkataloge"
-  ))
-  (set #update
-  (cat "\nWollen Sie die momentane Installation auf den neuesten Stand bringen "
-       "(Update) oder alles neu installieren?\n\n"
-       "ACHTUNG: Bei einem Update von Envoy V1.x sollten Sie alles neu installieren!\n\n"
-       "Bei einer Neuinstallation wird auch die Konfiguration neu erstellt."
-  ))
-  (set #updatechoice1
-  (cat "Update"
-  ))
-  (set #updatechoice2
-  (cat "Neuinstallation"
-  ))
-  (set #updatehelp
-  (cat "\nDer Installer hat herausgefunden, daß Envoy schon installiert "
-       "ist. Wenn dies falsch ist oder Sie alles neu installieren wollen, "
-       "dann wählen Sie \"Neuinstallation\" ansonsten können Sie \"Update\" wählen."
-  ))
-  (set #startrun
-  (cat "Welche Envoy \"services\" sollen aktiviert werden, wenn der "
-       "\"Services Manager\" gestartet wird? "
-  ))
-  (set #startrunchoices1
-  (cat "Drucker (Printer)"
-  ))
-  (set #startrunchoices2
-  (cat "Dateisystem (File System)"
-  ))
-  (set #startrunhelp
-  (cat "\nDrucker\n"
-       "\n"
-       "Wenn Sie einen Drucker dem Netzwerk zur Verfügung stellen wollen, "
-       "dann wählen Sie diesen Punkt.\n"
-       "\n"
-       "Dateisystem\n"
-       "\n"
-       "Wenn andere Rechner im Netzwerk auf Dateisysteme dieses Rechners "
-       "Zugriff erhalten sollen, so müssen Sie diesen Punkt wählen.\n"
-  ))
-  (set #updateprefix
-  (cat "Erneuere "
-  ))
-  (set #installprefix
-  (cat "Installiere "
-  ))
-  (set #msglibs
-  (cat "die Envoy-Libraries"
-  ))
-  (set #msgonlinehelp
-  (cat "die Online-Hilfe"
-  ))
-  (set #msgclientconfig
-  (cat "die Client-Konfigurationsprogramme"
-  ))
-  (set #msgserverconfig
-  (cat "die Server-Konfigurationsprogramme"
-  ))
-  (set #msgaccounts
-  (cat "die Benutzerverwaltung"
-  ))
-  (set #msgservices
-  (cat "die Verwaltung der Services"
-  ))
-  (set #msgenvoydevs
-  (cat "die Envoy-Devices"
-  ))
-  (set #msgenvoyl
-  (cat "die Envoy-Handler"
-  ))
-  (set #msgdevsV37
-  (cat "die Druckerunterstützung für OS 2.04"
-  ))
-  (set #msgprefsV37
-  (cat "die Druckersteuerung für OS 2.04"
-  ))
-  (set #iconpos-save
-  (cat "Die Piktogrammpositionen der aktuellen Installation werden jetzt gesichert."
-  ))
-  (set #iconpos-savemsg
-  (cat "Sichere Position von\n"
-  ))
-  (set #iconpos-update
-  (cat "Setze Envoy Piktogrammpositionen ..."
-  ))
-  (set #deinstall
-  (cat "\nMöchten Sie Ihre derzeitige Envoy Installation erst löschen bevor sie mit der "
-       "Neuinstallation fortfahren?\n\n"
-       "ACHTUNG! Alles was nur zu Envoy gehört wird dabei gelöscht. Dazu gehören z.B. "
-       "das komplette Envoy-Verzeichnis, die Bibliotheken und die Konfigurationsdateien. "
-       "Sie können diesen Vorgang nicht rückgängig machen! "
-       "Sie sollten dazu die Hilfe lesen!\n\n"
-       "Wählen Sie \"Zuerst löschen!\" nur, wenn Sie sich sicher sind, daß Sie das alles wollen!"
-  ))
-  (set #deinstall-help
-  (cat "Beachten Sie, daß Mount-Einträge in DEVS:DOSDrivers oder DEVS:Mountlist "
-       "aus Sicherheitsgründen nicht gelöscht werden. Sie müssen Sie manuell entfernen. "
-       "Auch Netzwerk-Treiber und aktuellere OS-Dateien werden nicht mehr gelöscht. "
-       "Falls Sie über Envoy ausgedruckt haben, müssen Sie auch Ihre Druckerkonfiguration "
-       "neu setzen. "
-       "Abgesehen vom Envoy-Verzeichnis, das wirklich komplett gelöscht wird, werden "
-       "nur Dateien die ohne Gefahr gelöscht werden können, gelöscht."
-  ))
-  (set #deinstallchoice1
-  (cat "Zuerst löschen!"
-  ))
-  (set #deinstallchoice2
-  (cat "Nur Installieren"
-  ))
-  (set #deinstall-working
-  (cat "Lösche die vorhandene Envoy-Installation..."
-  ))
-  (set #deinstall-done
-  (cat "Envoy ist jetzt auf der Festplatte gelöscht."
-  ))
-;  (set #
-;  (cat
-;  ))
-))
 
-;----------------------------------------------------------------------------
-(procedure P_SANADEVNAME #i
-(select #i
-    "a2065.device"
-    "a2060.device"
-    "amoksana.device"
-    "ariadne_ii.device"
-    "icard.device"
-    ""
-))
-
-;----------------------------------------------------------------------------
-(procedure P_DELETE #delpattern
-(
-    (run (cat "C:Delete >NIL: QUIET ALL FORCE \"" #delpattern "\""))
-))
-
-;----------------------------------------------------------------------------
-(procedure P_DELETESAFE #delpattern
-(
-    (run (cat "C:Delete >NIL: QUIET ALL FORCE \"" #delpattern "\"") (safe))
-))
-
-;----------------------------------------------------------------------------
-; Cleanup any temporary mess we created
-(procedure CLEANUP
-(
-    (if #origenvarc
-        (if (<> #origenvarc #destenvarc)
-            (makeassign "ENVARC" #origenvarc)
-        )
-    )
-
-    (if tmp_dir
-        (if (exists tmp_dir)
-            (P_DELETESAFE tmp_dir)
-        )
-    )
-    (if tmp_iconfile
-        (if (exists tmp_iconfile)
-            (delete tmp_iconfile (safe))
-        )
-    )
-))
-
-;----------------------------------------------------------------------------
-; Unpacks archive and updates files in a destination directory
-; Doesn't handle subdirectories!
-;   arc_file:       archive name
-;   dest_dir:       final destination
-;   unpack_update:  use copylib instead of copyfiles
-;   unpack_prompt:  message to print for the user
-(procedure UNPACKARCHIVE
-(
-(if unpack_prompt
-  (
-    (set unpack_msg
-        (cat
-            (if unpack_update
-                (#updateprefix)
-                (#installprefix)
-            )
-            unpack_prompt
-            "."
-        )
-    )
-    (working unpack_msg)
-  )
-)
-(P_DELETESAFE (tackon tmp_dir "#?"))
-(if (= 0 (run (cat "ENVOY3_Disk1:c/lhex -qaiFw=" tmp_dir " x " (tackon #envoy_source arc_file)) (safe)))
-  (
-    ; Make sure that the destination exists
-    (makedir dest_dir (infos))
-
-    (if unpack_prompt
-      (
-        (if unpack_update
-            (foreach tmp_dir "#?"
-                (copylib   (source (tackon tmp_dir @each-name))
-                           (dest dest_dir)
-                           (optional "oknodelete" "force" "askuser")
-                           (prompt unpack_msg)
-                )
-            )
-            (copyfiles (source tmp_dir)
-                       (dest dest_dir)
-                       (optional "oknodelete" "force" "askuser")
-                       (all)
-                       (prompt unpack_msg)
-            )
-        )
-      )
-      (
-        (if unpack_update
-            (foreach tmp_dir "#?"
-                (copylib   (source (tackon tmp_dir @each-name))
-                           (dest dest_dir)
-                           (optional "oknodelete" "force" "askuser")
-                )
-            )
-            (copyfiles (source tmp_dir)
-                       (dest dest_dir)
-                       (optional "oknodelete" "force" "askuser")
-                       (all)
-            )
-        )
-      )
-    )
-  )
-)
-(P_DELETESAFE (tackon tmp_dir "#?"))
-))
-
-;----------------------------------------------------------------------------
-(procedure REMEMBERICONPOS
-; We only remember icon positions when doing an update
-; src_file:     The .info file we are looking at
-; dest_file:    The name to remember the icon position for
-(if #is_update
-  (if (exists src_file)
-    (
-    (working (cat #iconpos-savemsg (fileonly src_file)))
-    ; First obtain the icon position
-    (run "setenv envoyicons \"\"" (safe))
-    (set cmd (cat (tackon #envoy_source "c/NewIconPos")
-         " \"" src_file "\""
-         " ONLYPOS CMDNAME PRINTNOPROMPT DESTNAME=\"" dest_file "\""
-         " >>" tmp_iconfile))
-    (run cmd (safe))
-    (set iconpos (getenv "envoyicons"))
-    (run "unsetenv envoyicons" (safe))
-    )
-  )
 ))
 
 ;----------------------------------------------------------------------------
 ; *** THIS IS THE ACTUAL START OF THE INSTALLATION ***
 
-(onerror (CLEANUP))
+; (onerror (CLEANUP))
 
-(set #envoy_source "ENVOY3_Disk1:")
+;(set #envoy_source "ENVOY3_Disk1:")
 
 (if (< (/ (getversion) 65536) 37)
         (abort #use20)
@@ -1045,23 +313,6 @@
 
 (set #WBVersion (/ (getversion "SYS:Libs/version.library") 65536))
 
-(set #inetactive 0)
-(if (or (exists "inet:libs/inet.library" (noreq))
-        (exists "amitcp:bin/startnet" (noreq))
-        (exists "libs:socket.library" (noreq))
-    )
-  (
-    (message #useinet)
-    (set #inetactive 1)
-  )
-)
-
-(set #tofloppy
-    (= 0 (askbool
-        (prompt #floppy)
-        (help #floppyhelp)
-        (choices #floppychoices2 #floppychoices1)
-)))
 
 (complete 5)
 
@@ -1070,8 +321,6 @@
 ; libs, devs, and handlers into standard locations
 ; We use the SYS:foo notation to get it right for warped
 ; dumb user systems on boot.
-(set #is_update 0)
-(set #delete_old 0)
 (set #destlibs   "SYS:Libs")
 (set #destl      "SYS:L")
 (set #destc      "SYS:C")
@@ -1079,377 +328,144 @@
 (set #destlocale "LOCALE:")
 (set #destenvarc "ENVARC:")
 (set #origenvarc #destenvarc)
+(set @default-dest "SYS:")
+(set #devnetdir (tackon #destdevs "Networks"))
 
-(if #tofloppy
-  (
-    (message #floppywarning
-       (help #floppywarninghelp)
-    )
-
-    (set #sysok 0)
-    (set wheresys (getdevice "SYS:"))
-    (if (OR (= wheresys "DF0")
-            (= wheresys "DF1")
-            (= wheresys "DF2")
-            (= wheresys "DF3")
-            (= wheresys "RD0"))
-        (set #sysok 1)
-    )
-
-    ; Heavy debugging magic!!
-    (if (AND (= "on" (getenv "debug")) (= wheresys "RD0"))
-      (
-        (set #origenvarc (getassign "ENVARC" "a"))
-        (makeassign "ENVARC" "RD0:Prefs/Env-Archive")
-      )
-    )
-
-    (set #envoy_dest "SYS:Envoy")
-  )
-  (
-    ; Find install location on HD
-    (if (exists "SYS:Envoy")
-      (
-        (set @default-dest "SYS:")
-      )
-      (
-        (if (exists "Work:Envoy" (noreq))
-          (
-            (set @default-dest "Work:")
-          )
-          (
-            (run "setenv envoydev SYS:" (safe))
-            (run (cat (tackon #envoy_source "c/guessenvoydev") " >env:envoydev") (safe))
-            (set @default-dest (getenv "envoydev"))
-            (run "unsetenv envoydev" (safe))
-          )
+(set #envoy_dest
+    (tackon
+        (askdir
+            (prompt #where)
+            (help @askdir-help)
+            (default @default-dest)
         )
-      )
+        "Envoy"
     )
-
-    (set #envoy_dest
-        (tackon
-            (askdir
-                (prompt #where)
-                (help @askdir-help)
-                (default @default-dest)
-            )
-            "Envoy"
-        )
-    )
-    (set #sysok 1)
-
-    ; If the destination is already present, we are either doing an update
-    ; or an uninstall
-    (if (exists #envoy_dest)
-      (
-        (if (askbool
-                (prompt #update)
-                (help #updatehelp)
-                (choices #updatechoice1 #updatechoice2)
-                (default 1)
-            )
-            ; if user wants in same place
-            (set #is_update 1)
-        )
-      )
-    )
-
-    (if (= @user-level 2)
-      (
-        (set #destdevs
-            (askdir (prompt (#wherepattern #where_devs))
-                    (help @askdir-help) (default #destdevs)))
-        (set #destlibs
-            (askdir (prompt (#wherepattern #where_libs))
-                    (help @askdir-help) (default #destlibs)))
-        (set #destl
-            (askdir (prompt (#wherepattern #where_l))
-                    (help @askdir-help) (default #destl)))
-        (set #destc
-            (askdir (prompt (#wherepattern #where_c))
-                    (help @askdir-help) (default #destc)))
-        (set #destlocale
-            (askdir (prompt (#wherepattern #where_locale))
-                    (help @askdir-help) (default #destlocale)))
-        (set #destenvarc
-            (askdir (prompt (#wherepattern #where_envarc))
-                    (help @askdir-help) (default #destenvarc)))
-        (if (or (exists #envoy_dest) (exists "ENV:Envoy"))
-          (
-
-            ; Maybe we are supposed to deinstall envoy?
-            (if (askbool
-                    (prompt #deinstall)
-                    (help #deinstall-help)
-                    (choices #deinstallchoice1 #deinstallchoice2)
-                    (default 0)
-                )
-                (set #delete_old 1)
-            )
-          )
-        )
-
-      )
-    )
-
-  )
 )
 
-(complete 10)
+(message #envoy_dest)
 
-(if (= #sysok 0)
-    (abort #notwb)
-)
+(set #sysok 1)
 
-;----------------------------------------------------------------------------
-;
-;  Now that we know where it goes and whether we are overwriting it:
-;
-(if (NOT @pretend)
-    (set @default-dest #envoy_dest)
-)
-
-;----------------------------------------------------------------------------
-(if #delete_old
-  (
-    ; We are supposed to get rid of any and all existing Envoy stuff first
-
-    ; First we get rid of the Envoy tree. This is dangerous stuff!
-    (P_DELETE #envoy_dest)
-    (delete (cat #envoy_dest ".info") (optional "force"))
-    (P_DELETE "ENV:Envoy")
-    (P_DELETE (tackon #destenvarc "Envoy"))
-
-    (working #deinstall-working)
-
-    ; Then we get rid of the libraries and devices and handlers
-    ; Well, we try to.
-    (delete (tackon #destlibs "nipc.library"))
-    (delete (tackon #destlibs "envoy.library"))
-    (delete (tackon #destlibs "accounts.library"))
-    (delete (tackon #destlibs "services.library"))
-    (delete (tackon #destl    "EnvoyFileSystem"))
-    (delete (tackon #destdevs "EnvoyPrint.device"))
-    (delete "SYS:WBStartup/Accounts Manager")
-    (delete "SYS:WBStartup/Accounts Manager.info")
-    (delete "SYS:WBStartup/Accounts Manager Start")
-    (delete "SYS:WBStartup/Accounts Manager Start.info")
-    (delete "SYS:WBStartup/Services Manager")
-    (delete "SYS:WBStartup/Services Manager.info")
-    (delete "SYS:WBStartup/Services Manager Start")
-    (delete "SYS:WBStartup/Services Manager Start.info")
-    (delete "C:Owner")
-    (delete "C:Group")
-    (delete "C:ChangeEFSLogin")
-    (delete "C:SpoolMgr")
-    (delete (tackon #destlocale "catalogs/deutsch/sys/envoyprefs.catalog"))
-    (delete (tackon #destlocale "catalogs/nederlands/sys/envoyprefs.catalog"))
-
-    (message #deinstall-done)
-
-    (complete 100)
-
-    (copyfiles
-        (source "ENVOY3_Disk1:C/Reboot")
-        (dest   "RAM:")
-    )
-
-    (message #rebootdeinstall (all))
-    (run "RAM:Reboot")
-  )
-)
-
-;----------------------------------------------------------------------------
-(if #tofloppy
-  (
-    ; Some things are deleted for whichever OS version
-    (delete "SYS:System/DiskCopy")
-    (delete "SYS:System/DiskCopy.info")
-    (delete "SYS:System/Format")
-    (delete "SYS:System/Format.info")
-    (delete "SYS:System/NoFastMem")
-    (delete "SYS:System/NoFastMem.info")
-    (delete "SYS:System/FixFonts")
-    (delete "SYS:System/FixFonts.info")
-    (delete "SYS:Utilities/Exchange")
-    (delete "SYS:Utilities/Exchange.info")
-    (delete "SYS:Utilities/Clock")
-    (delete "SYS:Utilities/Clock.info")
-    (delete "SYS:Devs/clipboard.device")
-    (delete "SYS:L/aux-handler")
-    (delete "SYS:libs/mathtrans.library")
-    (delete "SYS:libs/mathieeesingtrans.library")
-    (delete "SYS:libs/mathieeedoubtrans.library")
-    (delete "SYS:libs/mathieeedoubbas.library")
-    (delete "SYS:C/Edit")
-    (delete "SYS:C/MagTape")
-    (delete "SYS:C/Makelink")
-    (delete "SYS:C/Setfont")
-    (delete "SYS:C/Sort")
-    (delete "SYS:Trashcan")
-    (delete "SYS:Trashcan.info")
-    (delete "SYS:Prefs/IControl")
-    (delete "SYS:Prefs/IControl.info")
-    (delete "SYS:Prefs/Font")
-    (delete "SYS:Prefs/Font.info")
-    (delete "SYS:Prefs/Printer")
-    (delete "SYS:Prefs/Printer.info")
-    (delete "SYS:Prefs/PrinterGfx")
-    (delete "SYS:Prefs/PrinterGfx.info")
-
-    ;
-    ; V37.  We have to delete a whole bunch of stuff to make
-    ; room for everything.
-    ;
-    (if (= #WBVersion 37)
-      (
-        (delete "SYS:Libs/translator.library")
-        (delete "SYS:Devs/narrator.device")
-        (delete "SYS:L/speak-handler")
-        (delete "SYS:Utilities/Say")
-        (delete "SYS:Utilities/Say.info")
-        (delete "SYS:Prefs/Pointer")
-        (delete "SYS:Prefs/Pointer.info")
-        (delete "SYS:Utilities/Display")
-        (delete "SYS:Utilities/Display.info")
-        (delete "SYS:C/DiskDoctor")
-      )
-    )
-
-    ; V39.  We have to delete a whole bunch of stuff to make
-    ; room for everything.
-    ;
-    (if (>= #WBVersion 39)
-      (
-        (delete "SYS:Devs/mfm.device")
-        (delete "SYS:L/CrossDOSFileSystem")
-        (delete "SYS:Classes/DataTypes/8svx.datatype")
-        (delete "SYS:Classes/DataTypes/anim.datatype")
-        (delete "SYS:Classes/DataTypes/sound.datatype")
-        (delete "SYS:Classes/DataTypes/cdxl.datatype")
-        (delete "SYS:Classes/DataTypes/picture.datatype")
-        (delete "SYS:Classes/DataTypes/ilbm.datatype")
-        (delete "SYS:Classes/Gadgets/colorwheel.gadget")
-        (delete "SYS:Classes/Gadgets/tapedeck.gadget")
-        (delete "SYS:Classes/Gadgets/gradientslider.gadget")
-        (delete "SYS:Libs/bullet.library")
-        (delete "SYS:Libs/lowlevel.library")
-        (delete "SYS:Libs/realtime.library")
-        (delete "SYS:Libs/nonvolatile.library")
-        (delete "SYS:Libs/rexxsyslib.library")
-        (delete "SYS:Libs/rexxsupport.library")
-        (delete "SYS:Devs/DosDrivers/PIPE#?")
-        (delete "SYS:C/RequestFile")
-        (delete "SYS:C/Status")
-        (delete "SYS:C/RequestChoice")
-        (delete "SYS:C/SetDate")
-        (delete "SYS:C/Relabel")
-        (delete "SYS:C/Ed")
-        (delete "SYS:C/DiskChange")
-        (delete "SYS:C/Install")
-        (delete "SYS:Rexxc/HI")
-        (delete "SYS:Rexxc/RXC")
-        (delete "SYS:Rexxc/RXSET")
-        (delete "SYS:Rexxc/TCO")
-        (delete "SYS:Rexxc/TCS")
-        (delete "SYS:Rexxc/RX")
-        (delete "SYS:Rexxc/RXLIB")
-        (delete "SYS:Rexxc/TCC")
-        (delete "SYS:Rexxc/TE")
-        (delete "SYS:Devs/DataTypes/8SVX")
-        (delete "SYS:Devs/DataTypes/ANIM")
-        (delete "SYS:Devs/DataTypes/CDXL")
-        (delete "SYS:Devs/DataTypes/ILBM")
-        (delete "SYS:Devs/DataTypes/8SVX.info")
-        (delete "SYS:Devs/DataTypes/ANIM.info")
-        (delete "SYS:Devs/DataTypes/CDXL.info")
-        (delete "SYS:Devs/DataTypes/ILBM.info")
-      )
-    )
-
-  )
-)
-
-(complete 13)
-
-;----------------------------------------------------------------------------
-; Collect config information now
-; Ethernet defaults cover pretty much everything except for ARCNET
-(set #IPType 2048)
-(set #ARPType 2054)
-(if #inetactive
-  (
-    ; If Inet runs, we save ourselves some configuration headache, if
-    ; we bump the default IP/ARP types to avoid packet collisions.
-    (set #IPType 2049)
-    (set #ARPType 2055)
-  )
-)
-
-(if (NOT #is_update)
-  (
-    ;
-    ;  Get configuration information from the user:
-    ;  Let's configure what the user will do at boot time
-    ;
-    (set OwnerName (askstring (prompt #owner) (default "None")  (help #ownerhelp)))
-    (set HostName  (askstring (prompt #name)  (default "Amiga") (help #namehelp)))
-
-    ; Simple or complex network?
-    (set NetworkType (askchoice (prompt #networktype)
-                                (choices #nettypechoices1 #nettypechoices2)
-                                (help #nettypehelp)))
-
-    (if (= NetworkType 0)
-      (
-    ;  No Internet: (simple)
-    ;
-    ;  Hostname
-    ;  Address (1-254)
-    ;  SANA-II Device  (no need to support multiple devices if not internet)
-    ;                  (don't need subnet mask)
-        (set #HostIP "192.168.0.")
-        (set #HostIP
-            (cat    #HostIP
-                (asknumber
-                    (prompt #number)
-                    (default "1")
-                    (help #numberhelp)
-                    (range 1 254)
-                )
-            )
+; If the destination is already present, warn the user
+; and let them bail out.
+(if (exists #envoy_dest)
+   (
+    (if (askbool
+            (prompt #reinstall)
+            (help #reinstallhelp)
+            (choices #reinstallchoice1 #reinstallchoice2)
+            (default 1)
         )
-      )
-      (
-    ;  Internet: (complex)
-    ;
-    ;  Hostname
-    ;  Address (full IP number)
-    ;  SANA-II Devices (with all the fixin's)
-    ;  Realm name
-    ;  Realm Server
-    ;  Realms
-    ;  Gateway config
-        (set #HostIP
-            (askstring
-                (prompt #netaddr)
-                (default "192.168.0.1")
-                (help #netaddrhelp)
-            )
+        ; if user wants in reinstall
+        (set #ok_reinstall 1)
+        (exit) ; TBD Need to fail!
+    )
+   )
+)
+
+; Ask for device details.
+
+(if (NOT (exists #devnetdir))
+    (makedir #devnetdir)
+)
+
+
+(message #other)
+(set #DeviceName
+    (askfile
+        (default #devnetdir)
+        (prompt #selectother)
+        (help #otherhelp)
+    )
+)
+
+(set #DeviceUnit
+    (asknumber
+        (prompt #devunit)
+        (default "0")
+        (help #devunithelp)
+        (range 0 10) ; not sure what max device number is
+    )
+)
+
+(if (askbool
+        (prompt #etherorarc)
+        (help #etherorarchelp)
+        (choices #ethernet #arcnet)
+        (default 1)
+    )
+    ( ; default Ethernet
+        (set #IPType 2049)
+        (set #ARPType 2055)
+    )
+    ( ; ArcNet
+        (set #IPType 242)
+        (set #ARPType 243)
+    )
+)
+
+
+(set #IPType
+    (asknumber
+        (default #IPType)
+        (prompt #askip)
+        (help #iphelp)
+    )
+)
+
+(set #ARPType
+    (asknumber
+        (default #ARPType)
+        (prompt #askarp)
+        (help #arphelp)
+    )
+)
+
+(set OwnerName (askstring (prompt #owner) (default "None")  (help #ownerhelp)))
+(set HostName  (askstring (prompt #name)  (default "Amiga") (help #namehelp)))
+
+; Rather than present simple vs complex.  This tries to set up IP config with
+; one flow and simple defaults.
+
+(set #SubnetPrefix
+    (askstring
+        (prompt #subnetprompt)
+        (default "192.168.0")
+        (help #subnethelp)
+    )
+)
+
+(set #NodeNumber
+    (asknumber
+        (prompt #number)
+        (default "1")
+        (help #numberhelp)
+        (range 1 254)
+    )
+)
+
+(set #HostIP
+    (askstring
+        (prompt #netaddr)
+        (default
+            (cat #SubnetPrefix "." #NodeNumber)
         )
-        (set #SubnetMask "None")
-        (if (askbool (prompt #subnet) (default 1) (help #subnethelp))
-            (set #SubnetMask
-                (askstring
-                    (prompt #submask)
-                    (default #SubnetMask)
-                    (help #submaskhelp)
-                )
-            )
-        )
-        (set #DefaultRouter "None")
-        (if (askbool (prompt #routeraddr) (default 1) (help #routeraddrhelp))
+        (help #netaddrhelp)
+    )
+)
+
+(set #SubnetMask "255.255.255.0")
+(if (not (askbool (prompt #subnet) (default 1) (help #subnethelp)))
+             (askstring
+                 (prompt #submask)
+                 (default #SubnetMask)
+                 (help #submaskhelp)
+             )
+
+)
+
+(set #DefaultRouter "None")
+    (if (askbool (prompt #routeraddr) (default 1) (help #routeraddrhelp))
             (set #DefaultRouter
                 (askstring
                     (prompt #defrouter)
@@ -1457,8 +473,10 @@
                     (help #defrouterhelp)
                 )
             )
-        )
-        (set #RealmName
+)
+
+(if (askbool (prompt #realmprompt) (default 2) (help #realmprompthelp))
+        ((set #RealmName
             (askstring
                 (prompt #realm)
                 (default "NET")
@@ -1471,362 +489,101 @@
                 (default "192.168.0.254")
                 (help #realmserverhelp)
             )
-        )
-      )
-    )
-
-    (set #DeviceDriver
-        (askchoice
-            (prompt #type)
-            (choices #typechoices1 #typechoices2
-                     #typechoices3 #typechoices4
-                     #typechoices5
-                     #typechoicesother)
-            (default 0)
-            (help #typehelp)
-        )
-    )
-
-    ; Did the user chose "other"?
-    (if (= #DeviceDriver 5)
-        (
-            (set #devnetdir (tackon #destdevs "Networks"))
-            (if (NOT (exists #devnetdir))
-                (makedir #devnetdir)
-            )
-
-            (message #other)
-            (set #DeviceName
-                (askfile
-                    (default #devnetdir)
-                    (prompt #selectother)
-                    (help #otherhelp)
-                )
-            )
-            (set #IPType
-                (asknumber
-                    (default #IPType)
-                    (prompt #askip)
-                    (help #iphelp)
-                )
-            )
-            (set #ARPType
-                (asknumber
-                    (default #ARPType)
-                    (prompt #askarp)
-                    (help #arphelp)
-                )
-            )
-        )
-    )
-
-    ; Determine which services to install (none for floppy installation)
-    ; default is no services
-    (set #svcs 0)
-    (if (NOT #tofloppy)
-        (set #svcs   (askoptions
-                        (prompt #startrun)
-                        (choices #startrunchoices1 #startrunchoices2)
-                        (default 2)
-                        (help #startrunhelp)
-                    )
-        )
-    )
-  )
+        ))
 )
 
-(complete 15)
+(complete 25)
 
-;----------------------------------------------------------------------------
-; create the temporary directory that we need for unpacking some stuff
-(set tmp_dir "RAM:EID")
-(makedir tmp_dir (safe))
 
-; Setup the file that we need to remember the icon positions
-(set tmp_iconfile "T:envoyiconpos")
-(textfile (dest tmp_iconfile) (append "FailAt 25\n")(safe))
 
-;----------------------------------------------------------------------------
-; Update the SetPatch
-(copylib
-    (source "ENVOY3_Disk1:c/SetPatch")
-    (dest   "SYS:C")
-    (optional "oknodelete" "force" "askuser")
-)
-
-; If we create these directories now, we don't have to check for them
-; below
-(if (NOT (exists #envoy_dest))
-    (makedir #envoy_dest (infos))
-)
-
-(if (NOT (exists "ENV:Envoy"))
-    (makedir "ENV:Envoy")
-)
-
-(if (NOT (exists (tackon #destenvarc "Envoy")))
-    (makedir (tackon #destenvarc "Envoy"))
-)
-
-;----------------------------------------------------------------------------
-(complete 20)
-
-; For an update, remember all the current icon positions of the installation
-(if #is_update
-  (
-    (message #iconpos-save)
-
-    ; For Envoy 3, the names of the printer prefs have changed.
-    ; We try to copy over the old ones to get the old icon positions.
-    (set n 0)
-    (while (set src_file (select n "Configuration/Printer Import.info"
-                                   "Configuration/Printer Export.info"
-                                   ""))
-        (set src_file  (tackon #envoy_dest src_file))
-
-        (if (exists src_file)
-          (
-            (set dest_file (select n "Configuration/Printer Imports.info"
-                                     "Configuration/Printer Exports.info"
-                           ))
-
-            (if (NOT (exists (tackon #envoy_dest dest_file)))
-              (
-                (copyfiles
-                    (source src_file)
-                    (dest   #envoy_dest)
-                    (newname dest_file)
-                )
-              )
-            )
-          )
-        )
-
-        (set n (+ n 1))
+(foreach "C" "#?"
+    (copylib
+        (source (tackon "C" @each-name))
+        (dest   "SYS:C")
+        (optional "oknodelete" "force" "askuser")
     )
-
-    ; All the standard stuff is easy
-    (set n 0)
-    (while (set src_file   (select n "Configuration/Filesystem Imports.info"
-                                     "Configuration/Filesystem Exports.info"
-                                     "Configuration/Groups.info"
-                                     "Configuration/Users.info"
-                                     "Configuration/Network Configuration.info"
-                                     "Configuration/Services Configuration.info"
-                                     "Configuration/Printer Imports.info"
-                                     "Configuration/Printer Exports.info"
-                                     "Configuration/Network Printing.info"
-                                     "Services/filesystem.service.info"
-                                     "Services/printspool.service.info"
-                                     "Services/Services Manager.info"
-                                     "Accounts/Accounts Manager.info"
-                                     ""))
-      (
-        (set src_file  (tackon #envoy_dest src_file))
-
-        (set dest_file src_file)
-        (set n (+ n 1))
-
-        (complete (+ 20 n))
-        (REMEMBERICONPOS)
-      )
-    )
-
-    ; Now to the tricky stuff. Up to 2.0a, we had the managers in WBStartup
-    ; Starting with 2.0b, we will only have start icons there, but they should be
-    ; placed in the same position as the managers.
-    ; And if we already have start icons, we need their position instead.
-    (set src_file  "SYS:WBStartup/Accounts Manager.info")
-    (set dest_file "SYS:WBStartup/Accounts Manager Start.info")
-    (REMEMBERICONPOS)
-    (set src_file  "SYS:WBStartup/Accounts Manager Start.info")
-    (set dest_file "SYS:WBStartup/Accounts Manager Start.info")
-    (REMEMBERICONPOS)
-
-    (complete 37)
-
-    (set src_file  "SYS:WBStartup/Services Manager.info")
-    (set dest_file "SYS:WBStartup/Services Manager Start.info")
-    (REMEMBERICONPOS)
-    (set src_file  "SYS:WBStartup/Services Manager Start.info")
-    (set dest_file "SYS:WBStartup/Services Manager Start.info")
-    (REMEMBERICONPOS)
-  )
 )
 
-(complete 40)
-
-;----------------------------------------------------------------------------
-;
-;  Do the main copying.  Because pattern and all are mutually exclusive,
-;  I have to copy each directory separately!!!
-;
-(set unpack_prompt #msglibs)
-(set unpack_update #is_update)
-(set arc_file "packed/libs.lha")
-(set dest_dir #destlibs)
-(UNPACKARCHIVE)
-
-(complete 45)
-
-(if (>= #WBVersion 38)
-  (
-    (set n 0)
-    (while (set lang (select n "deutsch"
-                               ""))
-      (
-        (if (= @language lang)
-          (
-              (copylib (prompt (cat #installprefix "envoyprefs.catalog"))
-                  (source ("ENVOY3_Disk1:locale/catalogs/%s/sys/envoyprefs.catalog" lang))
-                  (dest (tackon #destlocale ("catalogs/%s/sys" lang)))
-              )
-          )
-        )
-        (set n (+ n 1))
-
-        (complete (+ 45 n))
-      )
+(foreach "L" "#?"
+    (copylib
+        (source (tackon "L" @each-name))
+        (dest   "SYS:L")
+        (optional "oknodelete" "force" "askuser")
     )
-  )
 )
 
-(complete 53)
-
-(if (NOT (exists (tackon #envoy_dest "Configuration")))
-    (makedir (tackon #envoy_dest "Configuration") (infos))
+(foreach "Libs" "#?"
+    (copylib
+        (source (tackon "Libs" @each-name))
+        (dest   "SYS:Libs")
+        (optional "oknodelete" "force" "askuser")
+    )
 )
 
-; We only copy online help files to the harddisk, never to a floppy disk
-(if (NOT #tofloppy)
-  (
-    (if (>= #WBVersion 39)
-      (
-        (set unpack_prompt #msgonlinehelp)
-        (set unpack_update #is_update)
-        (set arc_file "packed/configdoc_usa.lha")
-        (set dest_dir (tackon #envoy_dest "Configuration"))
-        (UNPACKARCHIVE)
-        (if (= @language "deutsch")
-          (
-            (set unpack_prompt #msgonlinehelp)
-            (set unpack_update #is_update)
-            (set arc_file "packed/configdoc_d.lha")
-            (set dest_dir (tackon #envoy_dest "Configuration"))
-            (UNPACKARCHIVE)
-          )
-        )
-      )
+(foreach "Devs" "#?"
+    (copylib
+        (source (tackon "Devs" @each-name))
+        (dest   "SYS:Devs")
+        (optional "oknodelete" "force" "askuser")
     )
+)
 
-    ; Now copy the (english) manual
+(makedir #envoy_dest (infos))
+(makedir "SYS:Envoy/Configuration" (infos))
+(makedir "SYS:Envoy/Accounts" (infos))
+(makedir "SYS:Envoy/Services" (infos))
+
+(foreach "Configuration" "#?"
+    (copylib
+        (source (tackon "Configuration" @each-name))
+        (dest   "SYS:Envoy/Configuration")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
+
+(foreach "Configuration" "#?.info"
     (copyfiles
-        (source "ENVOY3_Disk2:EnvoyManual.guide")
-        (dest   #envoy_dest)
-        (infos)
+        (source (tackon "Configuration" @each-name))
+        (dest   "SYS:Envoy/Configuration")
+        (optional "oknodelete" "force" "infos" "askuser")
     )
-    (if (= @language "deutsch")
-      (
-        (copyfiles
-            (source "ENVOY3_Disk2:EnvoyHandbuch.guide")
-            (dest   #envoy_dest)
-            (infos)
-        )
-      )
-    )
-  )
 )
 
-(complete 55)
-
-; We always install the client parts. The server parts won't be
-; installed on a floppy disk
-(set unpack_prompt #msgclientconfig)
-(set unpack_update #is_update)
-(set arc_file "packed/configclient.lha")
-(set dest_dir (tackon #envoy_dest "Configuration"))
-(UNPACKARCHIVE)
-
-; Delete pre Envoy 3 Printer prefs.
-(delete (tackon #envoy_dest "Configuration/Printer Import(|.info)"))
-(delete (tackon #envoy_dest "Configuration/Printer Export(|.info)"))
-
-(complete 57)
-
-(if (NOT #tofloppy)
-  (
-    (set unpack_prompt #msgserverconfig)
-    (set unpack_update #is_update)
-    (set arc_file "packed/configserver.lha")
-    (set dest_dir (tackon #envoy_dest "Configuration"))
-    (UNPACKARCHIVE)
-  )
+(foreach "Accounts" "#?"
+    (copylib
+        (source (tackon "Accounts" @each-name))
+        (dest   "SYS:Envoy/Accounts")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
 )
 
-(complete 60)
+(foreach "Accounts" "#?.info"
+    (copyfiles
+        (source (tackon "Accounts" @each-name))
+        (dest   "SYS:Envoy/Accounts")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
 
-; Now comes something really fun. Depending on which version of the
-; OS the user has, we may or may not need to update some of the commands
-; in the C: directory.
-; We never overwrite the standard OS commands, we always update them.
-; Only Envoy specific commands can be truly re-installed.
+(foreach "Services" "#?"
+    (copylib
+        (source (tackon "Services" @each-name))
+        (dest   "SYS:Envoy/Services")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
 
-(set unpack_prompt #updating)
-(set unpack_update 1)
-(set arc_file "packed/c.lha")
-(set dest_dir #destc)
-(UNPACKARCHIVE)
+(foreach "Services" "#?.info"
+    (copyfiles
+        (source (tackon "Services" @each-name))
+        (dest "SYS:Envoy/Services")
+        (optional "oknodelete" "force" "infos" "askuser")
+    )
+)
 
-(complete 61)
-
-(set unpack_prompt #updating)
-(set unpack_update #is_update)
-(set arc_file "packed/cenvoy.lha")
-(set dest_dir #destc)
-(UNPACKARCHIVE)
-
-(complete 62)
-
-;----------------------------------------------------------------------------
-(set unpack_prompt #installfs)
-(set unpack_update #is_update)
-(set arc_file "packed/fsclient.lha")
-(set dest_dir #destl)
-(UNPACKARCHIVE)
-
-(complete 65)
-
-;----------------------------------------------------------------------------
-; Setup the Accounts Manager / the only way to survive - fth
 
 (set UserDBPath  (tackon #envoy_dest "Accounts/UserData"))
 (set GroupDBPath (tackon #envoy_dest "Accounts/GroupData"))
-
-(if #is_update
-  (
-    ; Heavy magic. If nothing is present, iconinfo won't modify the
-    ; passed variables.
-    (iconinfo (dest "SYS:WBStartup/Accounts Manager")
-              (gettooltype "UserDB" UserDBPath) (safe)
-    )
-    (iconinfo (dest "SYS:WBStartup/Accounts Manager Start")
-              (gettooltype "UserDB" UserDBPath) (safe)
-    )
-    (iconinfo (dest "SYS:WBStartup/Accounts Manager")
-              (gettooltype "GroupDB" GroupDBPath) (safe)
-    )
-    (iconinfo (dest "SYS:WBStartup/Accounts Manager Start")
-              (gettooltype "GroupDB" GroupDBPath) (safe)
-    )
-  )
-)
-
-; We always copy the Accounts Manager
-(set unpack_prompt #msgaccounts)
-(set unpack_update #is_update)
-(set arc_file "packed/accounts.lha")
-(set dest_dir (tackon #envoy_dest "Accounts"))
-(UNPACKARCHIVE)
 
 (tooltype
     (dest (tackon #envoy_dest "Accounts/Accounts Manager"))
@@ -1839,219 +596,82 @@
 (if (NOT (exists "ENV:Envoy/AccountsServer"))
   (
     (copyfiles
-        (source (tackon #envoy_source "startupicons/Accounts Manager Start.info"))
+        (source "StartupIcons/Accounts Manager Start.info")
         (dest   "SYS:WBStartup")
     )
-  )
-)
-
-; We use start icons now. So delete all the old manager stuff in WBStartup!
-(delete "SYS:WBStartup/Accounts Manager"      (optional "force" "askuser"))
-(delete "SYS:WBStartup/Accounts Manager.info" (optional "force" "askuser"))
-
-; Compatibility hack for Envoy 2.0. Set the manager tooltypes in the
-; startup icon, too.
-(tooltype
-    (dest "SYS:WBStartup/Accounts Manager Start")
-;    (settooltype "UserDB"  UserDBPath)
-;    (settooltype "GroupDB" GroupDBPath)
-    (setdefaulttool (tackon #envoy_dest "Accounts/Accounts Manager"))
-)
-
-(complete 70)
-
-;----------------------------------------------------------------------------
-; Now the services stuff for a server (only HD!)
-(if (NOT #tofloppy)
-  (
-    (set unpack_prompt #msgservices)
-    (set unpack_update #is_update)
-    (set arc_file "packed/services.lha")
-    (set dest_dir (tackon #envoy_dest "Services"))
-    (UNPACKARCHIVE)
-
-    (complete 72)
-
-    ; Always get rid of old managers in the startup first!
-    ; Even for updates as the startup method changed!
-    (delete "SYS:WBStartup/Services Manager"      (optional "force" "askuser"))
-    (delete "SYS:WBStartup/Services Manager.info" (optional "force" "askuser"))
-
-    ; set up startup icon
-    (copyfiles
-        (source (tackon #envoy_source "startupicons/Services Manager Start.info"))
-        (dest   "SYS:WBStartup")
-    )
-
     (tooltype
-        (dest "SYS:WBStartup/Services Manager Start")
-        (setdefaulttool (tackon #envoy_dest "Services/Services Manager"))
+        (dest "SYS:WBStartup/Accounts Manager Start")
+;        (settooltype "UserDB"  UserDBPath)
+;        (settooltype "GroupDB" GroupDBPath)
+        (setdefaulttool (tackon #envoy_dest "Accounts/Accounts Manager"))
     )
 
-    ; We only create new prefs for a new installation
-    (if (NOT #is_update)
-      (
-        (textfile
-            (dest   "T:servicesconfig.txt")
-            (append (cat    "SERVICE \"Print Spooler\" \""
-                        (tackon #envoy_dest "Services/printspool.service")
-                        "\""
-                    )
-            )
-            (if (in #svcs 0)
-                (append (cat " Active\n"))
-                (append "\n")
-            )
-            (append (cat    "SERVICE \"Filesystem\" \""
-                        (tackon #envoy_dest "Services/filesystem.service")
-                        "\""
-                    )
-            )
-            (if (in #svcs 1)
-                (append (cat " Active\n"))
-                (append "\n")
-            )
-        )
+  )
+)
 
-        (complete 73)
 
-        ; Use the new services manager in "batch" mode to generate the config
-        ; Magic. Make sure to create a config first. Then load our update
-        (run ("\"%s\" SAVE"
-              (tackon #envoy_dest "Configuration/Services Configuration")
-             )
-        )
-        (run ("\"%s\" CFGFILE=T:servicesconfig.txt SAVE"
-              (tackon #envoy_dest "Configuration/Services Configuration")
-             )
-        )
-        (delete "T:servicesconfig.txt")
+
+(copyfiles
+    (source "StartupIcons/Services Manager Start.info")
+    (dest   "SYS:WBStartup")
+)
+
+(tooltype
+    (dest "SYS:WBStartup/Services Manager Start")
+    (setdefaulttool (tackon #envoy_dest "Services/Services Manager"))
+)
+
+
+;;; CONSOLIDATE WITH OTHER MAKEDIRS
+
+(if (NOT (exists "ENV:Envoy"))
+    (makedir "ENV:Envoy")
+)
+
+
+(if (NOT (exists (tackon #destenvarc "Envoy")))
+    (makedir (tackon #destenvarc "Envoy"))
+)
+
+(textfile
+    (dest   "T:servicesconfig.txt")
+    (append (cat"SERVICE \"Print Spooler\" \""
+                (tackon #envoy_dest "Services/printspool.service")
+                "\""
+            )
+    )
+    (append (cat " Active\n"))
+    (append "\n")
+
+    (append (cat "SERVICE \"Filesystem\" \""
+                 (tackon #envoy_dest "Services/filesystem.service")
+                  "\""
+            )
+    )
+
+    (append (cat " Active\n"))
+    (append "\n")
+
+)
+
+; Use the new services manager in "batch" mode to generate the config
+; Magic. Make sure to create a config first. Then load our update
+(run ("\"%s\" SAVE"
+      (tackon #envoy_dest "Configuration/Services Configuration")
       )
-    )
-  )
 )
 
-(complete 75)
-
-;----------------------------------------------------------------------------
-; Printer management
-
-(set unpack_prompt #msgdevs)
-(set unpack_update #is_update)
-(set arc_file "packed/devsenvoy.lha")
-(set dest_dir "SYS:Devs")
-(UNPACKARCHIVE)
-
-(complete 76)
-
-(set unpack_prompt #msgenvoyl)
-(set unpack_update 1)
-(set arc_file "packed/l.lha")
-(set dest_dir #destl)
-(UNPACKARCHIVE)
-
-(complete 77)
-
-; We need to update a few things to get Envoy printing going with V37
-(if (= #WBVersion 37)
-  (
-    (set unpack_prompt #msgdevsV37)
-    (set unpack_update 1)
-    (set arc_file "packed/devs.lha")
-    (set dest_dir #destdevs)
-    (UNPACKARCHIVE)
-
-    (complete 78)
-
-    (set unpack_prompt #msgprefsV37)
-    (set unpack_update 1)
-    (set arc_file "packed/prefs.lha")
-    (set dest_dir "SYS:Prefs")
-    (UNPACKARCHIVE)
-
-    (complete 79)
-
-    (startup "NetworkPrinting"
-        (prompt #addassign)
-        (command
-            ("ASSIGN PRINTERS: DEVS:Printers")
-        )
-        (help #addassignhelp)
-    )
-  )
+(run ("\"%s\" CFGFILE=T:servicesconfig.txt SAVE"
+      (tackon #envoy_dest "Configuration/Services Configuration")
+     )
 )
 
-(complete 80)
-
-;----------------------------------------------------------------------------
-(if #is_update
-  (
-    ; Now update the icon positions!
-    (if (exists tmp_iconfile)
-      (
-        (working #iconpos-update)
-        (execute tmp_iconfile)
-      )
-    )
-
-    (CLEANUP)
-
-    (complete 100)
-
-    (copyfiles
-        (source "ENVOY3_Disk1:C/Reboot")
-        (dest   "RAM:")
-    )
-
-    (message #reboot (all))
-    (run "RAM:Reboot")
-  )
-)
-
-;----------------------------------------------------------------------------
-;----------------------------------------------------------------------------
-; Determine the device driver and copy it to the disk if needed
-(set #devname (P_SANADEVNAME #DeviceDriver))
-(if (= #devname "a2060.device")
-  (
-    (set #IPType 240)
-    (set #ARPType 241)
-    (if #inetactive
-      (
-        (set #IPType 242)
-        (set #ARPType 243)
-      )
-    )
-  )
-)
-
-(if (<> #devname "")
-  (
-    (set #devnetdir (tackon #destdevs "Networks"))
-    (if (NOT (exists #devnetdir))
-        (makedir #devnetdir)
-    )
-
-    (set #DeviceName (tackon #devnetdir #devname))
-    (copylib
-        (source (tackon "ENVOY3_Disk1:DEVS/Networks" #devname))
-        (dest   #devnetdir)
-    )
-  )
-)
-
-(set #DeviceUnit 0)
-
-; icard.device magic. Typically, the user wants unit 1 for 10Base2
-(if (= (fileonly #DeviceName) "icard.device")
-    (set #DeviceUnit 1)
-)
-
-(complete 90)
+;(delete "T:servicesconfig.txt")
 
 
 ;----------------------------------------------------------------------------
 ; Build a basic nipc configuration after killing the old one! f-a-i-t-h 98
+
 
 (delete "ENVARC:Envoy/nipc.prefs")
 (delete "ENV:Envoy/nipc.prefs")
@@ -2075,14 +695,14 @@
   )
 )
 
-(set HostInfo ("HOSTINFO \"%s\" %s OWNER \"%s\"\n" HostName #realminfo OwnerName))
-(set DevInfo ("\nDEVINFO \"%s\" UNIT %ld %s \"%s\" %ld %ld ACTIVE\n"
+(set #HostInfo ("HOSTINFO \"%s\" %s OWNER \"%s\"\n" HostName #realminfo OwnerName))
+(set #DevInfo ("\nDEVINFO \"%s\" UNIT %ld %s \"%s\" %ld %ld ACTIVE\n"
           #DeviceName #DeviceUnit #submaskinfo #HostIP #IPType #ARPType))
 
 (textfile
     (dest   "T:nipcconfig.txt")
-    (append HostInfo)
-    (append DevInfo)
+    (append #HostInfo)
+    (append #DevInfo)
     (append #routeinfo)
 )
 
@@ -2092,46 +712,24 @@
       (tackon #envoy_dest "Configuration/Network Configuration")
      )
 )
-(delete "T:nipcconfig.txt")
+;(delete "T:nipcconfig.txt")
 
-(complete 92)
 
-;----------------------------------------------------------------------------
-; If we have an old (<3.0) EFS prefs file and no new EFS prefs file,
-; do a silent conversion, but leave the old one just in case.
-(if (exists "ENV:Envoy/efs.config")
-  (
-    (if (NOT (exists "ENV:Envoy/efs.prefs"))
-      (
-        (run ("\"%s\" FROM ENV:Envoy/efs.config SAVE" (tackon #envoy_dest "Configuration/Filesystem Exports")))
-      )
-    )
-  )
-)
+;; create services configuration
 
-(if (NOT #tofloppy)
-  (
-    (run ("\"%s\" InitDB UserDB \"%s\" GroupDB \"%s\" Shutdown"
-          (tackon #envoy_dest "Accounts/Accounts Manager")
-          UserDBPath
-          GroupDBPath))
-  )
-)
 
-(complete 95)
 
-;----------------------------------------------------------------------------
-(CLEANUP)
 
-(complete 100)
 
-(copyfiles
-    (source "ENVOY3_Disk1:C/Reboot")
-    (dest   "RAM:")
-)
+;;; COPY FILES
+(complete 75)
 
-(message #rebootpw (all))
 
-(message #reboot (all))
-(run "RAM:Reboot")
+
+
+
+
+
+
+
 

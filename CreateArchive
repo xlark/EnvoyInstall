@@ -25,6 +25,10 @@ makedir Envoy3.1/Developer
 makedir Envoy3.1/Help
 
 
+copy ENVOY3_Disk1:STARTUPICONS Envoy3.1/StartupIcons all
+protect Envoy3.1/StartupIcons/#? rwd
+copy ENVOY3_Disk1:LOCALE Envoy3.1/Locale all
+
 
 lha e ENVOY3_Disk1:PACKED/ACCOUNTS.LHA Envoy3.1/Accounts/
 lha e ENVOY3_Disk1:PACKED/C.LHA Envoy3.1/c/
@@ -40,6 +44,8 @@ lha e ENVOY3_Disk1:PACKED/SERVICES.LHA Envoy3.1/Services/
 lha e ENVOY3_Disk1:EXTRAS/DEVELOPER.LHA Envoy3.1/Developer/
 
 copy ENVOY3_Disk1:EXTRAS/NIPCLOG Envoy3.1/c/
+copy ENVOY3_Disk1:c/setpatch Envoy3.1/c/
+
 
 rename Envoy3.1/Configuration/EnvoyPrefs.guide Envoy3.1/Help/EnvoyPrefs.guide
 copy Envoy3_Disk2:ENVOYMANUAL.GUIDE Envoy3.1/Help/
