@@ -1,0 +1,13 @@
+Create Install Script
+* Update script to apply patches to developer archives
+* Split Developer drawer from main install drawer
+* Copy other files, like legal and readme
+
+Installation Script
+* Add support for gateway
+* Add support for Realms
+* Add printer patch
+* Add configuration summary screen and confirmation
+
+
+
