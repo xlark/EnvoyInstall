@@ -1,0 +1,37 @@
+Scripts to create Envoy3.1 Installation Directory
+
+What is Envoy?
+
+Envoy is a networking suite for the Commodore Amiga.  It provides peer-to-peer
+networking capabilities for Amiga computers with bundled support for file and
+printer sharing.
+
+
+Originally published by Commodore, the final commercial version was 
+Envoy 3.0 published by Schatztruhe.  The last update was Envoy 3.1.
+
+Why these scripts?
+
+Envoy is no longer available commercially, but I'm unsure of who has the 
+rights.  The only publicly available version is a floppy version of Envoy 3.0
+released by the cracking group Faith in 1998.
+
+This version is available on TOSEC, but the installation scripts are broken.
+
+Additionally, the update for Envoy 3.1, which is available on Aminet, does
+not play nice with the cracked Envoy 3.0 version available.
+
+What do these scripts do?
+
+These scripts take files from available sources and create a working Envoy 3.0
+installation drawer.
+
+Additionally, a new install script is included that works!
+
+What are the pre-requisites?
+
+1.  A copy of LHa installed in your Amiga's path
+2.  A copy of the update archive from Aminet
+3.  A copy of the Envoy disks from TOSEC
+
+
